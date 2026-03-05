@@ -1,0 +1,435 @@
+@import "tailwindcss";
+
+/* ESPN Design System Fonts */
+@font-face {
+  font-family: 'ESPN Ignite Display';
+  src: url('https://gitlab.disney.com/espn-design-system/tokens/-/raw/main/packages/fonts/IgniteDisplay/IgniteDisplay-CondensedHeavy.woff2') format('woff2'),
+       url('https://gitlab.disney.com/espn-design-system/tokens/-/raw/main/packages/fonts/IgniteDisplay/IgniteDisplay-CondensedHeavy.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ESPN Ignite Display';
+  src: url('https://gitlab.disney.com/espn-design-system/tokens/-/raw/main/packages/fonts/IgniteDisplay/IgniteDisplay-CondensedHeavyItalic.woff2') format('woff2'),
+       url('https://gitlab.disney.com/espn-design-system/tokens/-/raw/main/packages/fonts/IgniteDisplay/IgniteDisplay-CondensedHeavyItalic.woff') format('woff');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ESPN Ignite Text Narrow';
+  src: url('https://gitlab.disney.com/espn-design-system/tokens/-/raw/main/packages/fonts/IgniteTextNarrow/IgniteTextNarrow-Regular.woff2') format('woff2'),
+       url('https://gitlab.disney.com/espn-design-system/tokens/-/raw/main/packages/fonts/IgniteTextNarrow/IgniteTextNarrow-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ESPN Ignite Text Narrow';
+  src: url('https://gitlab.disney.com/espn-design-system/tokens/-/raw/main/packages/fonts/IgniteTextNarrow/IgniteTextNarrow-Bold.woff2') format('woff2'),
+       url('https://gitlab.disney.com/espn-design-system/tokens/-/raw/main/packages/fonts/IgniteTextNarrow/IgniteTextNarrow-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Benton Sans';
+  src: url('https://gitlab.disney.com/espn-design-system/tokens/-/raw/main/packages/fonts/BentonSans/BentonSans-Regular.woff2') format('woff2'),
+       url('https://gitlab.disney.com/espn-design-system/tokens/-/raw/main/packages/fonts/BentonSans/BentonSans-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Benton Sans';
+  src: url('https://gitlab.disney.com/espn-design-system/tokens/-/raw/main/packages/fonts/BentonSans/BentonSans-Medium.woff2') format('woff2'),
+       url('https://gitlab.disney.com/espn-design-system/tokens/-/raw/main/packages/fonts/BentonSans/BentonSans-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  /* ESPN Design System — Color Primitives (neutral) */
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f9f9f9;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e0e0e0;
+  --color-neutral-300: #cccccc;
+  --color-neutral-400: #999999;
+  --color-neutral-500: #808080;
+  --color-neutral-600: #666666;
+  --color-neutral-700: #444444;
+  --color-neutral-800: #2a2a2a;
+  --color-neutral-850: #1e1e1e;
+  --color-neutral-900: #121212;
+  --color-neutral-1000: #000000;
+
+  /* ESPN Design System — Brand */
+  --color-espn-red: #f51825;
+  --color-espn-blue: #3772df;
+  --color-espn-gold: #ffc432;
+
+  /* ESPN Design System — Accent */
+  --color-accent: #3772DF;
+  --color-accent-light: #d9ff5c;
+
+  /* ESPN Design System — Status */
+  --color-status-success: #2dcc30;
+  --color-status-error: #ff3232;
+  --color-status-warning: #ff7700;
+  --color-status-neutral: #666666;
+
+  /* Streak glow (app-specific) */
+  --color-streak-glow: #3772DF;
+
+  /* ESPN Design System — Font Families */
+  --font-display: 'ESPN Ignite Display', Impact, 'Arial Black', sans-serif;
+  --font-title: 'ESPN Ignite Text Narrow', 'Arial Narrow', Arial, sans-serif;
+  --font-body: 'Benton Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+@keyframes streak-pulse {
+  0%, 100% { filter: drop-shadow(0 0 6px var(--color-streak-glow)); }
+  50% { filter: drop-shadow(0 0 20px var(--color-streak-glow)) drop-shadow(0 0 40px var(--color-accent)); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes confetti-pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes loss-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+@keyframes countdown-bar {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@utility animate-streak-pulse {
+  animation: streak-pulse 2s ease-in-out infinite;
+}
+
+@utility animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out both;
+}
+
+@utility animate-confetti-pop {
+  animation: confetti-pop 0.5s ease-out both;
+}
+
+@utility animate-loss-shake {
+  animation: loss-shake 0.5s ease-out;
+}
+
+@utility animate-countdown-bar {
+  animation: countdown-bar 5s linear forwards;
+}
+
+@utility animate-slide-up {
+  animation: slide-up 0.3s ease-out both;
+}
+
+/*
+ * ESPN Design System — Theme Tokens
+ *
+ * Dark mode:  surface.*, text.inverted, icon.inverted, color.neutral.*
+ * Light mode: bg.surface.*, text.*, border.surface.*, icon.*
+ *
+ * Token references are documented inline.
+ */
+
+/* Dark theme (default) — surface.canvas / surface.overlay / text.inverted */
+[data-theme="dark"],
+:root {
+  /* Backgrounds — surface.canvas (#121212), surface.overlay (#1e1e1e) */
+  --color-theme-bg: #121212;             /* color.neutral.900 / surface.canvas */
+  --color-theme-bg-alt: #000000;         /* color.neutral.1000 */
+  --color-theme-surface: #1e1e1e;        /* color.neutral.850 / surface.overlay */
+  --color-theme-surface-alt: #2a2a2a;    /* color.neutral.800 */
+  --color-theme-surface-raised: #ffffff14; /* surface.raised / color.alpha.white.8 */
+
+  /* Borders */
+  --color-theme-border: #2a2a2a;         /* color.neutral.800 */
+  --color-theme-border-weak: #1e1e1e;    /* color.neutral.850 */
+  --color-theme-border-hover: #444444;   /* color.neutral.700 */
+
+  /* Text — text.inverted, then descending neutral scale */
+  --color-theme-text: #ffffff;           /* text.inverted / color.neutral.0 */
+  --color-theme-text-secondary: #cccccc; /* color.neutral.300 */
+  --color-theme-text-tertiary: #999999;  /* color.neutral.400 */
+  --color-theme-text-muted: #666666;     /* color.neutral.600 */
+  --color-theme-text-disabled: #444444;  /* color.neutral.700 / color.status.disabled */
+
+  /* Interactive */
+  --color-theme-nav-bg: #000000;         /* color.neutral.1000 */
+  --color-theme-nav-inactive: #808080;   /* icon.weakest / color.neutral.500 */
+  --color-theme-input-bg: #1e1e1e;       /* bg.action.inputs.default */
+  --color-theme-input-border: #0000003d; /* border.inputs.default / color.alpha.black.24 */
+
+  /* Scrollbar */
+  --color-theme-scrollbar: #444444;      /* color.neutral.700 */
+}
+
+/* Light theme — bg.surface.*, text.*, border.surface.* */
+[data-theme="light"] {
+  /* Backgrounds — bg.surface.canvas (#f5f5f5), bg.surface.raised (#ffffff) */
+  --color-theme-bg: #f5f5f5;            /* bg.surface.canvas / color.neutral.100 */
+  --color-theme-bg-alt: #e0e0e0;        /* color.neutral.200 */
+  --color-theme-surface: #ffffff;        /* bg.surface.raised / color.neutral.0 */
+  --color-theme-surface-alt: #f9f9f9;   /* bg.surface.floating / color.neutral.50 */
+  --color-theme-surface-raised: #00000014; /* bg.surface.translucent.subtle / color.alpha.black.8 */
+
+  /* Borders — border.surface.default (#e0e0e0), border.divider.weak (#f5f5f5) */
+  --color-theme-border: #e0e0e0;        /* border.surface.default / color.neutral.200 */
+  --color-theme-border-weak: #f5f5f5;   /* border.divider.weak / color.neutral.100 */
+  --color-theme-border-hover: #cccccc;  /* border.surface.floating / color.neutral.300 */
+
+  /* Text — text.default (#000000), text.weak (#444444), text.weaker (#666666) */
+  --color-theme-text: #000000;          /* text.default / color.neutral.1000 */
+  --color-theme-text-secondary: #444444; /* text.weak / color.neutral.700 */
+  --color-theme-text-tertiary: #666666;  /* text.weaker / color.neutral.600 */
+  --color-theme-text-muted: #999999;     /* color.neutral.400 */
+  --color-theme-text-disabled: #cccccc;  /* text.disabled / color.neutral.300 */
+
+  /* Interactive */
+  --color-theme-nav-bg: #000000;         /* black — matches dark mode tab styling */
+  --color-theme-nav-inactive: #808080;   /* same as dark mode */
+  --color-theme-input-bg: #ffffff00;     /* bg.inputs.default (transparent) */
+  --color-theme-input-border: #0000003d; /* border.inputs.default / color.alpha.black.24 */
+
+  /* Scrollbar */
+  --color-theme-scrollbar: #cccccc;      /* color.neutral.300 */
+}
+
+/*
+ * Header bar — themed
+ * Dark: lime bg, black text
+ * Light: black bg, white text
+ * Tab selected state: #CFFF18 in both themes
+ */
+[data-theme="dark"] .header-bar,
+:root .header-bar {
+  background-color: #CFFF18;
+}
+[data-theme="dark"] .header-text,
+:root .header-text {
+  color: #000000;
+}
+[data-theme="dark"] .header-streak-pill,
+:root .header-streak-pill {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .header-bar {
+  background-color: #000000;
+}
+[data-theme="light"] .header-text {
+  color: #ffffff;
+}
+[data-theme="light"] .header-streak-pill {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Light mode: tab nav uses black inactive text, #CFFF18 active (same as dark) */
+[data-theme="light"] .tab-nav-link {
+  color: #808080;
+}
+[data-theme="light"] .tab-nav-link.active {
+  color: #CFFF18;
+}
+
+/*
+ * CTA Pill Button — matches Figma CTAs/In Card
+ * Outline pill: 28px tall, rounded-full, 1px border, 12px Benton Sans Medium
+ * Dark: white border + text on transparent bg
+ * Light: near-black (#101113) border + text on transparent bg
+ * Active/selected state: filled with primary text color, inverted text
+ */
+.cta-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  padding: 4px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--color-theme-text);
+  background: transparent;
+  color: var(--color-theme-text);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.cta-pill:hover {
+  background-color: var(--color-theme-surface-alt);
+}
+
+.cta-pill:disabled {
+  cursor: not-allowed;
+}
+
+.cta-pill-active {
+  background-color: var(--color-theme-text);
+  color: var(--color-theme-bg);
+  border-color: var(--color-theme-text);
+}
+
+.cta-pill-active:hover {
+  background-color: var(--color-theme-text);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-body);
+  overscroll-behavior: none;
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-theme-scrollbar);
+  border-radius: 2px;
+}
+
+/*
+ * App shell container — enables container queries for toast + team names
+ */
+.app-shell {
+  container-type: inline-size;
+  container-name: app;
+}
+
+/*
+ * Toast — responsive layout
+ *
+ * Mobile (< 600px): full-width card, stacked text, bottom of screen
+ * Tablet/Desktop (≥ 600px): compact inline pill, centered, bottom of screen
+ */
+.toast-card {
+  width: 100%;
+  max-width: 358px;
+  border-radius: 16px;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+
+/* Mobile: slide up from bottom */
+.toast-hidden {
+  transform: translateY(calc(100% + 24px));
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.55, 0, 1, 0.45), opacity 0.25s ease;
+}
+
+.toast-visible {
+  transform: translateY(0);
+  opacity: 1;
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+}
+
+@container app (min-width: 600px) {
+  /* Reposition: top-right, just below header+nav (48+44 = 92px) */
+  .toast-anchor {
+    top: 100px !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: 0 !important;
+    justify-content: flex-end !important;
+    padding: 0 12px 0 0 !important;
+  }
+
+  /* Tablet/Desktop: slide in from right */
+  .toast-hidden {
+    transform: translateX(calc(100% + 24px));
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.55, 0, 1, 0.45), opacity 0.25s ease;
+  }
+
+  .toast-visible {
+    transform: translateX(0);
+    opacity: 1;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+  }
+}
+
+/*
+ * Responsive team names — ESPN pattern
+ * Render all three variants, toggle visibility with container queries.
+ * The pick-card wrapper sets container-type: inline-size so we respond
+ * to the card's width, not the viewport (supports the device controller).
+ *
+ * At 390px device → card is ~358px (minus layout px-4)
+ * At 820px device → cards go 2-col via sm:grid-cols-2, each ~386px
+ *
+ * < 240px  → abbreviation only  (DAL, GSW, S. Scheffler)
+ * 240–419px → short name         (Mavericks, Warriors, S. Scheffler)
+ * ≥ 420px  → full name          (Dallas Mavericks, Golden State Warriors)
+ */
+.pick-card-container {
+  container-type: inline-size;
+}
+
+.team-name-full,
+.team-name-short,
+.team-name-abbr {
+  display: none !important;
+}
+
+/* Default (narrowest): show abbreviation */
+.team-name-abbr {
+  display: block !important;
+}
+
+@container (min-width: 240px) {
+  .team-name-abbr { display: none !important; }
+  .team-name-short { display: block !important; }
+}
+
+@container (min-width: 420px) {
+  .team-name-short { display: none !important; }
+  .team-name-full { display: block !important; }
+}
