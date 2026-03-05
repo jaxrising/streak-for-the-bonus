@@ -71,6 +71,7 @@ export interface Achievement {
   title: string;
   description: string;
   icon: string;
+  badgeImage: string;
   earned: boolean;
   condition: (weeklyWins: number, weeklyStreak: number, allTimeWins: number) => boolean;
 }

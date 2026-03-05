@@ -1,9 +1,8 @@
 import { useMemo } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { achievements } from '../data/rewards';
-import AchievementBadge from '../components/AchievementBadge';
+import { AchievementCardLarge, AchievementGridItem } from '../components/AchievementBadge';
 import PickHistoryList from '../components/PickHistoryList';
-import { FireFlameIcon } from '../components/icons';
 
 export default function ProfilePage() {
   const { weeklyStreak, weeklyWins, allTimeWins, pickHistory } = useGameStore();
@@ -17,6 +16,7 @@ export default function ProfilePage() {
     [weeklyWins, weeklyStreak, allTimeWins]
   );
 
+  const earnedAchievements = computedAchievements.filter((a) => a.earned);
   const totalPicks = pickHistory.length;
   const wins = pickHistory.filter((p) => p.status === 'won').length;
   const winRate = totalPicks > 0 ? Math.round((wins / totalPicks) * 100) : 0;
@@ -25,7 +25,6 @@ export default function ProfilePage() {
     <div className="space-y-6">
       {/* Profile header */}
       <div className="text-center">
-        <div className="mb-2" style={{ color: 'var(--color-theme-text)' }}><FireFlameIcon size={48} /></div>
         <h2 className="text-[20px] leading-[26px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>You</h2>
         <p className="text-sm" style={{ color: 'var(--color-theme-text-tertiary)' }}>Streak Player</p>
       </div>
@@ -49,15 +48,41 @@ export default function ProfilePage() {
         ))}
       </div>
 
-      {/* Achievements */}
+      {/* Recently Earned carousel */}
+      {earnedAchievements.length > 0 && (
+        <div>
+          <div className="flex items-end justify-between mb-3">
+            <h3 className="text-[14px] leading-[18px] font-medium font-body" style={{ color: 'var(--color-theme-text)' }}>
+              Recently Earned
+            </h3>
+          </div>
+          <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+            {earnedAchievements.map((a) => (
+              <AchievementCardLarge key={a.id} achievement={a} />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* All Achievements grid */}
       <div>
-        <h3 className="text-[16px] leading-[24px] font-bold uppercase font-title mb-3" style={{ color: 'var(--color-theme-text-secondary)' }}>
-          Achievements ({computedAchievements.filter((a) => a.earned).length}/{computedAchievements.length})
-        </h3>
-        <div className="space-y-2">
-          {computedAchievements.map((a, i) => (
-            <AchievementBadge key={a.id} achievement={a} index={i} />
-          ))}
+        <div className="flex items-end justify-between mb-3">
+          <h3 className="text-[14px] leading-[18px] font-medium font-body" style={{ color: 'var(--color-theme-text)' }}>
+            All Achievements
+          </h3>
+          <span className="text-[12px] leading-[16px] font-body" style={{ color: 'var(--color-theme-text-muted)' }}>
+            {earnedAchievements.length} / {computedAchievements.length} Earned
+          </span>
+        </div>
+        <div
+          className="border rounded-xl p-4"
+          style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
+        >
+          <div className="grid grid-cols-3 gap-4">
+            {computedAchievements.map((a) => (
+              <AchievementGridItem key={a.id} achievement={a} />
+            ))}
+          </div>
         </div>
       </div>
 
