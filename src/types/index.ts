@@ -48,6 +48,7 @@ export interface LeaderboardUser {
   rank: number;
   username: string;
   avatar: string;
+  dailyWins: number;
   weeklyStreak: number;
   weeklyWins: number;
   allTimeWins: number;
@@ -56,10 +57,12 @@ export interface LeaderboardUser {
 
 export interface RewardTier {
   id: string;
+  type: 'streak' | 'wins';
   threshold: number;
   title: string;
   description: string;
   prize: string;
+  prizeValue: number;
   icon: string;
 }
 

@@ -3,6 +3,7 @@ import { useGameStore } from '../store/gameStore';
 import { achievements } from '../data/rewards';
 import AchievementBadge from '../components/AchievementBadge';
 import PickHistoryList from '../components/PickHistoryList';
+import { FireFlameIcon } from '../components/icons';
 
 export default function ProfilePage() {
   const { weeklyStreak, weeklyWins, allTimeWins, pickHistory } = useGameStore();
@@ -24,7 +25,7 @@ export default function ProfilePage() {
     <div className="space-y-6">
       {/* Profile header */}
       <div className="text-center">
-        <div className="text-5xl mb-2">🔥</div>
+        <div className="mb-2" style={{ color: 'var(--color-theme-text)' }}><FireFlameIcon size={48} /></div>
         <h2 className="text-[20px] leading-[26px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>You</h2>
         <p className="text-sm" style={{ color: 'var(--color-theme-text-tertiary)' }}>Streak Player</p>
       </div>

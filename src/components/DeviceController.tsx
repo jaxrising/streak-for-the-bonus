@@ -85,9 +85,9 @@ const btnBase: React.CSSProperties = {
 };
 
 const btnActive: React.CSSProperties = {
-  background: 'rgba(255,255,255,0.1)',
-  color: '#ffffff',
-  borderColor: 'rgba(255,255,255,0.3)',
+  background: 'rgba(99,202,62,0.15)',
+  color: '#63ca3e',
+  borderColor: 'rgba(99,202,62,0.5)',
 };
 
 export { PANEL_WIDTH };
@@ -117,8 +117,8 @@ export default function DeviceController({
           top: 0,
           height: '100vh',
           width: PANEL_WIDTH,
-          background: '#111',
-          borderRight: '1px solid #1e1e1e',
+          background: '#1a1a1a',
+          borderRight: '1px solid #2a2a2a',
           padding: '24px 12px',
           display: 'flex',
           flexDirection: 'column',
@@ -128,7 +128,7 @@ export default function DeviceController({
       >
         {/* DEVICE section */}
         <div>
-          <div style={{ fontSize: 9, textTransform: 'uppercase', color: '#444', letterSpacing: '0.12em', marginBottom: 10 }}>
+          <div style={{ fontSize: 9, textTransform: 'uppercase', color: '#666', letterSpacing: '0.12em', marginBottom: 10 }}>
             Device
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -162,11 +162,11 @@ export default function DeviceController({
         </div>
 
         {/* Divider */}
-        <div style={{ height: 1, background: '#1e1e1e', margin: '16px 0' }} />
+        <div style={{ height: 1, background: '#2a2a2a', margin: '16px 0' }} />
 
         {/* THEME section */}
         <div>
-          <div style={{ fontSize: 9, textTransform: 'uppercase', color: '#444', letterSpacing: '0.12em', marginBottom: 10 }}>
+          <div style={{ fontSize: 9, textTransform: 'uppercase', color: '#666', letterSpacing: '0.12em', marginBottom: 10 }}>
             Theme
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -235,12 +235,12 @@ export default function DeviceController({
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
           <span style={{ color: '#333' }}>Previewing:</span>
-          <span style={{ color: '#ffffff', fontWeight: 600 }}>
+          <span style={{ color: '#63ca3e', fontWeight: 600 }}>
             {devices.find((d) => d.id === currentDevice)?.label} — {currentWidth} × {currentHeight}
           </span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#ffffff' }}>
-          {currentTheme === 'dark' ? '🌙' : '☀️'} {currentTheme === 'dark' ? 'Dark' : 'Light'}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#63ca3e' }}>
+          {currentTheme === 'dark' ? <MoonIcon /> : <SunIcon />} {currentTheme === 'dark' ? 'Dark' : 'Light'}
         </div>
       </div>
     </>

@@ -1,4 +1,5 @@
 import type { Achievement } from '../types';
+import { Icon } from './icons';
 
 export default function AchievementBadge({ achievement, index }: { achievement: Achievement; index: number }) {
   return (
@@ -12,8 +13,8 @@ export default function AchievementBadge({ achievement, index }: { achievement: 
         borderColor: achievement.earned ? 'rgba(255, 199, 44, 0.3)' : 'var(--color-theme-border)',
       }}
     >
-      <div className={`text-2xl ${achievement.earned ? '' : 'grayscale'}`}>
-        {achievement.icon}
+      <div className={achievement.earned ? '' : 'grayscale'} style={{ color: 'var(--color-theme-text)' }}>
+        <Icon name={achievement.icon} size={28} />
       </div>
       <div className="flex-1 min-w-0">
         <div

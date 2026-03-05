@@ -1,10 +1,21 @@
-import { useGameStore } from '../store/gameStore';
-import { rewardTiers } from '../data/rewards';
+import type { RewardTier } from '../types';
+import { Icon } from './icons';
+import { FireFlameIcon } from './icons';
 
-export default function RewardProgressBar() {
-  const weeklyWins = useGameStore((s) => s.weeklyWins);
-  const maxThreshold = rewardTiers[rewardTiers.length - 1].threshold;
-  const progress = Math.min((weeklyWins / maxThreshold) * 100, 100);
+interface RewardProgressBarProps {
+  type: 'streak' | 'wins';
+  currentValue: number;
+  tiers: RewardTier[];
+  label: string;
+}
+
+export default function RewardProgressBar({ type, currentValue, tiers, label }: RewardProgressBarProps) {
+  const maxThreshold = tiers[tiers.length - 1].threshold;
+  const progress = Math.min((currentValue / maxThreshold) * 100, 100);
+  const gradient = type === 'streak'
+    ? 'linear-gradient(to right, #2dcc30, #1a9e1d)'
+    : 'linear-gradient(to right, #3772DF, #1a4fbf)';
+  const activeColor = type === 'streak' ? '#2dcc30' : '#3772DF';
 
   return (
     <div
@@ -12,16 +23,18 @@ export default function RewardProgressBar() {
       style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
     >
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[14px] leading-[20px] font-title" style={{ color: 'var(--color-theme-text-tertiary)' }}>Weekly Progress</span>
-        <span className="text-[14px] leading-[20px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>{weeklyWins} / {maxThreshold} wins</span>
+        <span className="text-[14px] leading-[20px] font-title" style={{ color: 'var(--color-theme-text-tertiary)' }}>{label}</span>
+        <span className="text-[14px] leading-[20px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>
+          {currentValue} / {maxThreshold} {type === 'streak' ? 'streak' : 'wins'}
+        </span>
       </div>
 
       <div className="relative h-3 rounded-full overflow-hidden mb-4" style={{ backgroundColor: 'var(--color-theme-bg)' }}>
         <div
           className="h-full rounded-full transition-all duration-700 ease-out"
-          style={{ background: 'linear-gradient(to right, #3772DF, #1a4fbf)', width: `${progress}%` }}
+          style={{ background: gradient, width: `${progress}%` }}
         />
-        {rewardTiers.map((tier) => (
+        {tiers.map((tier) => (
           <div
             key={tier.id}
             className="absolute top-0 h-full w-0.5"
@@ -31,14 +44,14 @@ export default function RewardProgressBar() {
       </div>
 
       <div className="flex justify-between">
-        {rewardTiers.map((tier) => (
+        {tiers.map((tier) => (
           <div
             key={tier.id}
             className="text-center"
-            style={{ color: weeklyWins >= tier.threshold ? '#3772DF' : 'var(--color-theme-text-muted)' }}
+            style={{ color: currentValue >= tier.threshold ? activeColor : 'var(--color-theme-text-muted)' }}
           >
-            <div className="text-lg">{tier.icon}</div>
-            <div className="text-xs mt-0.5">{tier.threshold}W</div>
+            <div><Icon name={tier.icon} size={22} /></div>
+            <div className="text-xs mt-0.5 flex items-center justify-center gap-0.5">{tier.threshold}{type === 'streak' ? <FireFlameIcon size={10} /> : 'W'}</div>
           </div>
         ))}
       </div>

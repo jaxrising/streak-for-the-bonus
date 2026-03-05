@@ -1,14 +1,14 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Link, Outlet } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import PickResult from './PickResult';
 import ActivePickBanner from './ActivePickBanner';
+import { PersonIcon } from './icons';
 
 const tabs = [
   { to: '/', label: 'HOME' },
+  { to: '/groups', label: 'GROUPS' },
   { to: '/leaderboard', label: 'LEADERS' },
   { to: '/rewards', label: 'REWARDS' },
-  { to: '/profile', label: 'PROFILE' },
-  { to: '/link', label: 'LINK' },
 ];
 
 function NativeStatusBar() {
@@ -65,6 +65,9 @@ export default function Layout() {
           <h1 className="font-display text-[20px] leading-[26px] font-black italic tracking-tight header-text">
             STREAK <span className="font-display font-black italic">FOR THE BONUS</span>
           </h1>
+          <Link to="/profile" className="absolute right-4 header-text">
+            <PersonIcon size={24} />
+          </Link>
         </div>
 
         {/* Tab Nav */}

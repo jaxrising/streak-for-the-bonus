@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { TVIcon, SportsBettingIcon } from './icons';
 
 interface AccountLinkCardProps {
   platform: 'ESPN' | 'DraftKings';
@@ -11,7 +12,6 @@ export default function AccountLinkCard({ platform, linked, onLink, disabled }: 
   const [loading, setLoading] = useState(false);
 
   const isESPN = platform === 'ESPN';
-  const icon = isESPN ? '📺' : '💚';
 
   const handleLink = () => {
     if (linked || loading || disabled) return;
@@ -35,7 +35,7 @@ export default function AccountLinkCard({ platform, linked, onLink, disabled }: 
       }}
     >
       <div className="flex items-center gap-3 mb-4">
-        <div className="text-3xl">{icon}</div>
+        <div style={{ color: 'var(--color-theme-text)' }}>{isESPN ? <TVIcon size={32} /> : <SportsBettingIcon size={32} />}</div>
         <div>
           <h3 className="text-[18px] leading-[24px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>{platform}</h3>
           <p className="text-xs" style={{ color: 'var(--color-theme-text-tertiary)' }}>

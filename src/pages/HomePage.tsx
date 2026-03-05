@@ -2,12 +2,17 @@ import { useEffect, useRef, useCallback } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { offerings } from '../data/offerings';
 import { resolveOutcome, RESOLVE_DELAY_MS } from '../lib/resolution';
+import { getCurrentWeekInfo } from '../lib/weekUtils';
 import StreakBadge from '../components/StreakBadge';
+import RewardStatusStrip from '../components/RewardStatusStrip';
 import PickCard from '../components/PickCard';
+import { FireFlameIcon, StarIcon } from '../components/icons';
+import draftkingsAd from '/draftkings-ad.png';
 
 export default function HomePage() {
-  const { activePick, resolvePick, weeklyWins, allTimeWins, resetDemo } = useGameStore();
+  const { activePick, resolvePick, weeklyWins, weeklyStreak, resetDemo } = useGameStore();
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const weekInfo = getCurrentWeekInfo();
 
   const resolve = useCallback(() => {
     const won = resolveOutcome();
@@ -24,18 +29,31 @@ export default function HomePage() {
 
   return (
     <div className="space-y-5">
-      {/* Streak + stats */}
-      <div className="flex items-center justify-between">
-        <StreakBadge />
-        <div className="text-right space-y-1">
-          <div className="text-xs" style={{ color: 'var(--color-theme-text-tertiary)' }}>
-            Weekly <span className="font-bold" style={{ color: 'var(--color-theme-text)' }}>{weeklyWins}W</span>
-          </div>
-          <div className="text-xs" style={{ color: 'var(--color-theme-text-tertiary)' }}>
-            All-Time <span className="font-bold" style={{ color: 'var(--color-theme-text)' }}>{allTimeWins}W</span>
-          </div>
+      {/* Dual stats bar */}
+      <div className="grid grid-cols-2 gap-3">
+        <div
+          className="rounded-xl border px-4 py-3"
+          style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
+        >
+          <StreakBadge value={weeklyStreak} label="Win Streak" icon={<FireFlameIcon size={36} />} pulse={weeklyStreak >= 3} />
+        </div>
+        <div
+          className="rounded-xl border px-4 py-3"
+          style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
+        >
+          <StreakBadge value={weeklyWins} label="Total Wins" icon={<StarIcon size={36} />} />
         </div>
       </div>
+
+      {/* Week label */}
+      <div className="text-center">
+        <span className="text-[12px] leading-[14px] tracking-[0.02em] font-title" style={{ color: 'var(--color-theme-text-tertiary)' }}>
+          {weekInfo.label}
+        </span>
+      </div>
+
+      {/* Reward status strip */}
+      <RewardStatusStrip />
 
       {/* Section header */}
       <div className="flex items-center justify-between">
@@ -45,12 +63,28 @@ export default function HomePage() {
         <span className="text-xs" style={{ color: 'var(--color-theme-text-muted)' }}>{offerings.length} available</span>
       </div>
 
-      {/* Offering cards */}
+      {/* Offering cards — first 6 (3 rows on sm) */}
       <div className="grid gap-3 sm:grid-cols-2">
-        {offerings.map((offering, i) => (
+        {offerings.slice(0, 6).map((offering, i) => (
           <PickCard key={offering.id} offering={offering} index={i} />
         ))}
       </div>
+
+      {/* DraftKings ad */}
+      <img
+        src={draftkingsAd}
+        alt="DraftKings"
+        className="w-full rounded-xl"
+      />
+
+      {/* Offering cards — remaining */}
+      {offerings.length > 6 && (
+        <div className="grid gap-3 sm:grid-cols-2">
+          {offerings.slice(6).map((offering, i) => (
+            <PickCard key={offering.id} offering={offering} index={i + 6} />
+          ))}
+        </div>
+      )}
 
       {/* Reset Demo */}
       <div className="pt-4 text-center">

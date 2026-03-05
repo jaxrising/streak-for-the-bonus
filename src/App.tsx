@@ -7,7 +7,7 @@ import HomePage from './pages/HomePage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import RewardsPage from './pages/RewardsPage';
 import ProfilePage from './pages/ProfilePage';
-import LinkAccountPage from './pages/LinkAccountPage';
+import GroupsPage from './pages/GroupsPage';
 
 type Device = 'mobile' | 'tablet' | 'desktop';
 type Theme = 'dark' | 'light';
@@ -72,7 +72,7 @@ export default function App() {
                 <Route path="/leaderboard" element={<LeaderboardPage />} />
                 <Route path="/rewards" element={<RewardsPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
-                <Route path="/link" element={<LinkAccountPage />} />
+                <Route path="/groups" element={<GroupsPage />} />
               </Route>
             </Routes>
           </BrowserRouter>
