@@ -12,8 +12,8 @@ export default function RewardProgressBar() {
       style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
     >
       <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-title" style={{ color: 'var(--color-theme-text-tertiary)' }}>Weekly Progress</span>
-        <span className="text-sm font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>{weeklyWins} / {maxThreshold} wins</span>
+        <span className="text-[14px] leading-[20px] font-title" style={{ color: 'var(--color-theme-text-tertiary)' }}>Weekly Progress</span>
+        <span className="text-[14px] leading-[20px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>{weeklyWins} / {maxThreshold} wins</span>
       </div>
 
       <div className="relative h-3 rounded-full overflow-hidden mb-4" style={{ backgroundColor: 'var(--color-theme-bg)' }}>

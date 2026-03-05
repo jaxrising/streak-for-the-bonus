@@ -37,7 +37,7 @@ export default function AccountLinkCard({ platform, linked, onLink, disabled }: 
       <div className="flex items-center gap-3 mb-4">
         <div className="text-3xl">{icon}</div>
         <div>
-          <h3 className="text-lg font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>{platform}</h3>
+          <h3 className="text-[18px] leading-[24px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>{platform}</h3>
           <p className="text-xs" style={{ color: 'var(--color-theme-text-tertiary)' }}>
             {isESPN ? 'Connect your ESPN account' : 'Link your DraftKings account'}
           </p>
@@ -45,7 +45,7 @@ export default function AccountLinkCard({ platform, linked, onLink, disabled }: 
       </div>
 
       {linked ? (
-        <div className={`flex items-center gap-2 text-sm font-semibold font-title ${isESPN ? 'text-espn-red' : 'text-status-success'}`}>
+        <div className={`flex items-center gap-2 text-[14px] leading-[20px] font-bold font-title ${isESPN ? 'text-espn-red' : 'text-status-success'}`}>
           <span>✓</span> Connected
         </div>
       ) : (

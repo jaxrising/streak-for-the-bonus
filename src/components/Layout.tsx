@@ -25,7 +25,7 @@ export default function Layout() {
           <div className="absolute left-4 flex items-center gap-1.5 header-streak-pill px-2.5 py-1 rounded-full">
             <span className="text-xs font-bold tabular-nums font-title header-text">{streak}</span>
           </div>
-          <h1 className="font-display text-[21px] font-black italic leading-none tracking-tight header-text">
+          <h1 className="font-display text-[20px] leading-[26px] font-black italic tracking-tight header-text">
             STREAK <span className="font-display font-black italic">FOR THE BONUS</span>
           </h1>
         </div>
@@ -41,7 +41,7 @@ export default function Layout() {
               to={tab.to}
               end={tab.to === '/'}
               className={({ isActive }) =>
-                `flex-1 relative flex items-center justify-center h-11 text-xs font-body tracking-wide transition-colors ${
+                `flex-1 relative flex items-center justify-center h-11 text-[12px] leading-[14px] tracking-[0.02em] font-body transition-colors ${
                   isActive ? '' : ''
                 }`
               }

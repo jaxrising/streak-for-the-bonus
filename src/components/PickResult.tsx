@@ -73,7 +73,7 @@ export default function PickResult() {
           {/* Title — Title 2 style from Figma: 20px bold */}
           <div className="text-center">
             <h2
-              className="text-[20px] leading-[24px] font-bold font-title"
+              className="text-[20px] leading-[26px] font-bold font-title"
               style={{ color: 'var(--color-theme-text)' }}
             >
               {isWin ? 'Pick Correct!' : 'Streak Over'}
@@ -109,7 +109,7 @@ export default function PickResult() {
               >
                 {weeklyStreak}
               </span>
-              <span className="text-[10px] mt-0.5" style={{ color: 'var(--color-theme-text-muted)' }}>
+              <span className="text-[11px] leading-[12px] tracking-[0.02em] mt-0.5" style={{ color: 'var(--color-theme-text-muted)' }}>
                 STREAK
               </span>
             </div>

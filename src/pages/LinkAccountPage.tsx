@@ -8,7 +8,7 @@ export default function LinkAccountPage() {
 
   return (
     <div className="space-y-5">
-      <h2 className="text-xl font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>Link Accounts</h2>
+      <h2 className="text-[20px] leading-[26px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>Link Accounts</h2>
       <p className="text-sm" style={{ color: 'var(--color-theme-text-tertiary)' }}>
         Connect your ESPN and DraftKings accounts to unlock rewards and claim prizes.
       </p>
@@ -50,7 +50,7 @@ export default function LinkAccountPage() {
       {bothLinked && (
         <div className="bg-status-success/10 border border-status-success/30 rounded-xl p-5 text-center animate-confetti-pop">
           <div className="text-3xl mb-2">🎉</div>
-          <h3 className="text-lg font-bold font-title text-status-success">All Set!</h3>
+          <h3 className="text-[18px] leading-[24px] font-bold font-title text-status-success">All Set!</h3>
           <p className="text-sm mt-1" style={{ color: 'var(--color-theme-text-tertiary)' }}>
             Your accounts are linked. Rewards will be automatically credited to your DraftKings account.
           </p>

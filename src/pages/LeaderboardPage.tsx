@@ -25,7 +25,7 @@ export default function LeaderboardPage() {
 
   return (
     <div className="space-y-5">
-      <h2 className="text-xl font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>Leaderboard</h2>
+      <h2 className="text-[20px] leading-[26px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>Leaderboard</h2>
 
       <div className="space-y-3">
         <TabToggle options={['Weekly', 'All-Time']} active={timeFrame} onChange={setTimeFrame} />

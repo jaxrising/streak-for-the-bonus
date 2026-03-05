@@ -111,7 +111,7 @@ export const offerings: Offering[] = [
     abbrA: 'TOT',
     abbrB: 'CRY',
     imageA: 'https://a.espncdn.com/i/teamlogos/soccer/500-dark/367.png',
-    imageB: 'https://a.espncdn.com/i/teamlogos/soccer/500/389.png',
+    imageB: 'https://a.espncdn.com/i/teamlogos/soccer/500-dark/384.png',
     colorA: '#132257',
     colorB: '#1B458F',
     oddsA: '-145',

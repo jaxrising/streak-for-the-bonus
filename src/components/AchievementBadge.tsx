@@ -17,7 +17,7 @@ export default function AchievementBadge({ achievement, index }: { achievement: 
       </div>
       <div className="flex-1 min-w-0">
         <div
-          className="text-sm font-semibold"
+          className="text-[14px] leading-[20px] font-medium"
           style={{ color: achievement.earned ? 'var(--color-theme-text)' : 'var(--color-theme-text-muted)' }}
         >
           {achievement.title}
@@ -25,7 +25,7 @@ export default function AchievementBadge({ achievement, index }: { achievement: 
         <div className="text-xs" style={{ color: 'var(--color-theme-text-muted)' }}>{achievement.description}</div>
       </div>
       {achievement.earned && (
-        <div className="text-espn-gold text-xs font-bold font-title">EARNED</div>
+        <div className="text-espn-gold text-[12px] leading-[14px] tracking-[0.02em] font-bold font-title">EARNED</div>
       )}
     </div>
   );

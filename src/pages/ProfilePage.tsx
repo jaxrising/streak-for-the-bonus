@@ -25,7 +25,7 @@ export default function ProfilePage() {
       {/* Profile header */}
       <div className="text-center">
         <div className="text-5xl mb-2">🔥</div>
-        <h2 className="text-xl font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>You</h2>
+        <h2 className="text-[20px] leading-[26px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>You</h2>
         <p className="text-sm" style={{ color: 'var(--color-theme-text-tertiary)' }}>Streak Player</p>
       </div>
 
@@ -50,7 +50,7 @@ export default function ProfilePage() {
 
       {/* Achievements */}
       <div>
-        <h3 className="text-sm font-semibold uppercase tracking-wider font-title mb-3" style={{ color: 'var(--color-theme-text-secondary)' }}>
+        <h3 className="text-[16px] leading-[24px] font-bold uppercase font-title mb-3" style={{ color: 'var(--color-theme-text-secondary)' }}>
           Achievements ({computedAchievements.filter((a) => a.earned).length}/{computedAchievements.length})
         </h3>
         <div className="space-y-2">
@@ -62,7 +62,7 @@ export default function ProfilePage() {
 
       {/* Pick History */}
       <div>
-        <h3 className="text-sm font-semibold uppercase tracking-wider font-title mb-3" style={{ color: 'var(--color-theme-text-secondary)' }}>
+        <h3 className="text-[16px] leading-[24px] font-bold uppercase font-title mb-3" style={{ color: 'var(--color-theme-text-secondary)' }}>
           Pick History
         </h3>
         <PickHistoryList />

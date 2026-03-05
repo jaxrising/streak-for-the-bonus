@@ -39,7 +39,7 @@ export default function HomePage() {
 
       {/* Section header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-semibold uppercase tracking-wider font-title" style={{ color: 'var(--color-theme-text-secondary)' }}>
+        <h2 className="text-[16px] leading-[24px] font-bold uppercase font-title" style={{ color: 'var(--color-theme-text-secondary)' }}>
           Today's Picks
         </h2>
         <span className="text-xs" style={{ color: 'var(--color-theme-text-muted)' }}>{offerings.length} available</span>

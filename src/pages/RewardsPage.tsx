@@ -5,7 +5,7 @@ import { rewardTiers } from '../data/rewards';
 export default function RewardsPage() {
   return (
     <div className="space-y-5">
-      <h2 className="text-xl font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>Rewards</h2>
+      <h2 className="text-[20px] leading-[26px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>Rewards</h2>
 
       <RewardProgressBar />
 
@@ -20,7 +20,7 @@ export default function RewardsPage() {
         style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
       >
         <p className="text-xs" style={{ color: 'var(--color-theme-text-tertiary)' }}>
-          Rewards powered by <span className="text-status-success font-semibold">DraftKings</span>.
+          Rewards powered by <span className="text-status-success font-medium">DraftKings</span>.
           Link your account to claim prizes.
         </p>
       </div>

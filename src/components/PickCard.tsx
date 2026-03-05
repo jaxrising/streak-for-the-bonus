@@ -38,7 +38,7 @@ function PickButton({
     <button
       onClick={onClick}
       disabled={isDisabled}
-      className={`relative flex items-center h-[52px] rounded-lg overflow-hidden text-sm font-semibold font-title transition-all duration-200 disabled:cursor-not-allowed ${
+      className={`relative flex items-center h-[52px] rounded-lg overflow-hidden text-[14px] leading-[20px] font-bold font-title transition-all duration-200 disabled:cursor-not-allowed ${
         isSelected ? 'ring-2' : ''
       }`}
       style={{
@@ -125,7 +125,7 @@ function PickButton({
 
       {odds && (
         <span
-          className="relative z-10 text-xs font-body shrink-0 pr-3 pl-2"
+          className="relative z-10 text-[12px] leading-[14px] tracking-[0.02em] font-body shrink-0 pr-3 pl-2"
           style={{ color: isSelected ? '#3772DF' : 'var(--color-theme-text-muted)' }}
         >
           {odds}
@@ -163,11 +163,11 @@ export default function PickCard({ offering, index }: PickCardProps) {
     >
       <div className="flex items-center gap-2 mb-3">
         <SportIcon sport={offering.sport} />
-        <span className="text-xs font-medium uppercase font-title" style={{ color: 'var(--color-theme-text-tertiary)' }}>{offering.league}</span>
+        <span className="text-[12px] leading-[14px] tracking-[0.02em] font-medium uppercase font-title" style={{ color: 'var(--color-theme-text-tertiary)' }}>{offering.league}</span>
         <span className="ml-auto text-xs" style={{ color: 'var(--color-theme-text-muted)' }}>{offering.startTime}</span>
       </div>
 
-      <p className="text-sm font-medium mb-4" style={{ color: 'var(--color-theme-text-secondary)' }}>{offering.question}</p>
+      <p className="text-[14px] leading-[20px] font-medium mb-4 line-clamp-2" style={{ color: 'var(--color-theme-text-secondary)' }}>{offering.question}</p>
 
       <div className="grid grid-cols-1 gap-2">
         <PickButton

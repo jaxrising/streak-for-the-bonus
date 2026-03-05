@@ -45,14 +45,14 @@ export default function ActivePickBanner() {
         <div className="toast-content">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-title" style={{ color: '#3772DF' }}>
+              <span className="text-[12px] leading-[14px] tracking-[0.02em] font-title" style={{ color: '#3772DF' }}>
                 Resolving Pick
               </span>
             </div>
-            <div className="toast-pick-text text-sm font-medium truncate mt-0.5" style={{ color: 'var(--color-theme-text)' }}>
+            <div className="toast-pick-text text-[14px] leading-[20px] font-medium truncate mt-0.5" style={{ color: 'var(--color-theme-text)' }}>
               {pick?.chosenOption}
             </div>
-            <div className="toast-question-text text-[11px] truncate mt-0.5" style={{ color: 'var(--color-theme-text-muted)' }}>
+            <div className="toast-question-text text-[11px] leading-[12px] tracking-[0.02em] truncate mt-0.5" style={{ color: 'var(--color-theme-text-muted)' }}>
               {offering?.question}
             </div>
           </div>

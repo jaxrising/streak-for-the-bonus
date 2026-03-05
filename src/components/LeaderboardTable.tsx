@@ -26,12 +26,12 @@ export default function LeaderboardTable({ users, sortBy }: LeaderboardTableProp
           }}
           data-delay={`${i * 50}ms`}
         >
-          <div className="w-8 text-center text-sm font-bold font-title" style={{ color: 'var(--color-theme-text-tertiary)' }}>
+          <div className="w-8 text-center text-[16px] leading-[24px] font-bold font-title" style={{ color: 'var(--color-theme-text-tertiary)' }}>
             {i + 1}
           </div>
           <div className="text-xl">{user.avatar}</div>
           <div className="flex-1 min-w-0">
-            <div className="text-sm font-medium truncate"
+            <div className="text-[14px] leading-[20px] font-medium truncate"
               style={{ color: user.isCurrentUser ? '#3772DF' : 'var(--color-theme-text)' }}
             >
               {user.username}
@@ -41,7 +41,7 @@ export default function LeaderboardTable({ users, sortBy }: LeaderboardTableProp
             </div>
           </div>
           <div className="text-right">
-            <div className="text-lg font-bold tabular-nums font-title" style={{ color: 'var(--color-theme-text)' }}>
+            <div className="text-[18px] leading-[24px] font-bold tabular-nums font-title" style={{ color: 'var(--color-theme-text)' }}>
               {sortBy === 'weekly' ? user.weeklyWins : user.allTimeWins}
             </div>
             <div className="text-xs" style={{ color: 'var(--color-theme-text-muted)' }}>

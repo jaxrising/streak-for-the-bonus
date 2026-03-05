@@ -283,6 +283,7 @@
   font-size: 12px;
   font-weight: 500;
   line-height: 14px;
+  letter-spacing: 0.02em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
