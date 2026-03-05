@@ -254,12 +254,41 @@
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Light mode: tab nav uses black inactive text, #CFFF18 active (same as dark) */
-[data-theme="light"] .tab-nav-link {
-  color: #808080;
+/* Native iOS status bar — inherits header bar color, hidden on desktop */
+[data-theme="dark"] .native-status-bar,
+:root .native-status-bar {
+  background-color: #CFFF18;
 }
-[data-theme="light"] .tab-nav-link.active {
-  color: #CFFF18;
+
+@container app (min-width: 1024px) {
+  .native-status-bar {
+    display: none;
+  }
+}
+[data-theme="dark"] .native-status-text,
+:root .native-status-text {
+  color: #000000;
+}
+[data-theme="dark"] .native-status-icon,
+:root .native-status-icon {
+  fill: #000000;
+}
+[data-theme="dark"] .native-status-stroke,
+:root .native-status-stroke {
+  color: #000000;
+}
+
+[data-theme="light"] .native-status-bar {
+  background-color: #000000;
+}
+[data-theme="light"] .native-status-text {
+  color: #ffffff;
+}
+[data-theme="light"] .native-status-icon {
+  fill: #ffffff;
+}
+[data-theme="light"] .native-status-stroke {
+  color: #ffffff;
 }
 
 /*

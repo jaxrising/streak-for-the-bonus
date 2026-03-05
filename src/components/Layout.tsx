@@ -11,6 +11,40 @@ const tabs = [
   { to: '/link', label: 'LINK' },
 ];
 
+function NativeStatusBar() {
+  return (
+    <div className="native-status-bar flex items-end justify-between h-[44px] px-[27px] pb-[7px] mb-[-1px]">
+      {/* Time */}
+      <span className="native-status-text" style={{ fontFamily: '-apple-system, "SF Pro Text", system-ui, sans-serif', fontSize: 17, fontWeight: 600, letterSpacing: -0.41, lineHeight: '22px' }}>
+        9:41
+      </span>
+      {/* Signal indicators */}
+      <div className="flex items-center gap-[7px]">
+        {/* Cellular */}
+        <svg width="18" height="12" viewBox="0 0 18 12" fill="none">
+          <rect x="0" y="8" width="3" height="4" rx="0.5" className="native-status-icon" />
+          <rect x="5" y="5" width="3" height="7" rx="0.5" className="native-status-icon" />
+          <rect x="10" y="2" width="3" height="10" rx="0.5" className="native-status-icon" />
+          <rect x="15" y="0" width="3" height="12" rx="0.5" className="native-status-icon" />
+        </svg>
+        {/* Wifi */}
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="none">
+          <path d="M8 11.5a1.2 1.2 0 100-2.4 1.2 1.2 0 000 2.4z" className="native-status-icon" />
+          <path d="M4.7 7.8a4.7 4.7 0 016.6 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" className="native-status-stroke" />
+          <path d="M2.3 5.3a8 8 0 0111.4 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" className="native-status-stroke" />
+          <path d="M.2 2.8a11 11 0 0115.6 0" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" className="native-status-stroke" />
+        </svg>
+        {/* Battery */}
+        <svg width="27" height="13" viewBox="0 0 27 13" fill="none">
+          <rect x="0.5" y="0.5" width="22" height="12" rx="2" stroke="currentColor" strokeWidth="1" className="native-status-stroke" style={{ opacity: 0.35 }} />
+          <rect x="2" y="2" width="19" height="9" rx="1" className="native-status-icon" />
+          <path d="M24 4.5c.8.3 1.5 1 1.5 2s-.7 1.7-1.5 2" className="native-status-stroke" style={{ opacity: 0.4 }} />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 export default function Layout() {
   const streak = useGameStore((s) => s.weeklyStreak);
 
@@ -21,6 +55,9 @@ export default function Layout() {
     >
       {/* Header */}
       <header className="sticky top-0 z-40">
+        {/* iOS native status bar */}
+        <NativeStatusBar />
+
         <div className="header-bar flex items-center justify-center relative h-12 px-4">
           <div className="absolute left-4 flex items-center gap-1.5 header-streak-pill px-2.5 py-1 rounded-full">
             <span className="text-xs font-bold tabular-nums font-title header-text">{streak}</span>
