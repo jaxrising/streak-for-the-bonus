@@ -65,7 +65,7 @@ export default function App() {
         }}
       >
         <DeviceFrame device={device}>
-          <BrowserRouter>
+          <BrowserRouter basename={import.meta.env.BASE_URL}>
             <Routes>
               <Route element={<Layout />}>
                 <Route path="/" element={<HomePage />} />

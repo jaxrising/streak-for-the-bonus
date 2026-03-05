@@ -85,9 +85,9 @@ const btnBase: React.CSSProperties = {
 };
 
 const btnActive: React.CSSProperties = {
-  background: 'rgba(200,57,10,0.15)',
-  color: '#ff6b35',
-  borderColor: 'rgba(200,57,10,0.4)',
+  background: 'rgba(255,255,255,0.1)',
+  color: '#ffffff',
+  borderColor: 'rgba(255,255,255,0.3)',
 };
 
 export { PANEL_WIDTH };
@@ -143,7 +143,7 @@ export default function DeviceController({
                   onMouseEnter={(e) => {
                     if (!isActive) {
                       e.currentTarget.style.background = '#1a1a1a';
-                      e.currentTarget.style.color = '#888';
+                      e.currentTarget.style.color = '#ffffff';
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -183,7 +183,7 @@ export default function DeviceController({
                   onMouseEnter={(e) => {
                     if (!isActive) {
                       e.currentTarget.style.background = '#1a1a1a';
-                      e.currentTarget.style.color = '#888';
+                      e.currentTarget.style.color = '#ffffff';
                     }
                   }}
                   onMouseLeave={(e) => {
@@ -206,10 +206,10 @@ export default function DeviceController({
 
         {/* VIEWPORT section */}
         <div>
-          <div style={{ fontSize: 9, textTransform: 'uppercase', color: '#444', letterSpacing: '0.12em', marginBottom: 6 }}>
+          <div style={{ fontSize: 9, textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.12em', marginBottom: 6 }}>
             Viewport
           </div>
-          <div style={{ fontSize: 10, color: '#444', fontVariantNumeric: 'tabular-nums' }}>
+          <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', fontVariantNumeric: 'tabular-nums' }}>
             {currentWidth} × {currentHeight}px
           </div>
         </div>
@@ -235,11 +235,11 @@ export default function DeviceController({
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
           <span style={{ color: '#333' }}>Previewing:</span>
-          <span style={{ color: '#ff6b35', fontWeight: 600 }}>
+          <span style={{ color: '#ffffff', fontWeight: 600 }}>
             {devices.find((d) => d.id === currentDevice)?.label} — {currentWidth} × {currentHeight}
           </span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#ff6b35' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#ffffff' }}>
           {currentTheme === 'dark' ? '🌙' : '☀️'} {currentTheme === 'dark' ? 'Dark' : 'Light'}
         </div>
       </div>
