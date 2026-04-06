@@ -64,25 +64,17 @@ function markSeen() {
   try { localStorage.setItem(SEEN_KEY, '1'); } catch {}
 }
 
+const TOOLTIP_KEY = SEEN_KEY + '-tooltip-dismissed';
+
 export function HowToPlayButton() {
   const [open, setOpen] = useState(() => isFirstVisit());
-  const [showTooltip, setShowTooltip] = useState(false);
 
   const handleClose = () => {
     setOpen(false);
     markSeen();
-    // Show tooltip after first-time close
-    if (isFirstVisit() || !localStorage.getItem(SEEN_KEY + '-tooltip-dismissed')) {
-      setShowTooltip(true);
-    }
+    // Dispatch event so HomePage can show the tooltip
+    window.dispatchEvent(new CustomEvent('htp-closed'));
   };
-
-  // Also mark seen on first open
-  useEffect(() => {
-    if (open && isFirstVisit()) {
-      // Will be marked when they close
-    }
-  }, [open]);
 
   return (
     <>
@@ -112,65 +104,39 @@ export function HowToPlayButton() {
       </button>
 
       {open && <HowToPlayModal onClose={handleClose} />}
-      {showTooltip && <PicksTooltipPortal onDismiss={() => {
-        setShowTooltip(false);
-        try { localStorage.setItem(SEEN_KEY + '-tooltip-dismissed', '1'); } catch {}
-      }} />}
     </>
   );
 }
 
-/** Finds the Today's Picks heading and renders tooltip above it via a portal-like approach */
-function PicksTooltipPortal({ onDismiss }: { onDismiss: () => void }) {
-  const [pos, setPos] = useState<{ top: number; left: number; width: number } | null>(null);
-  const ref = useRef<HTMLDivElement>(null);
+export function PicksTooltip() {
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Find the "Today's Picks" heading in the DOM
-    const headings = document.querySelectorAll('h2');
-    let target: HTMLElement | null = null;
-    headings.forEach((h) => {
-      if (h.textContent?.includes("Today's Picks")) target = h.parentElement as HTMLElement;
-    });
-
-    if (!target) return;
-
-    const update = () => {
-      const scrollParent = target!.closest('main');
-      if (!scrollParent) return;
-      const parentRect = scrollParent.getBoundingClientRect();
-      const rect = target!.getBoundingClientRect();
-      setPos({
-        top: rect.top - parentRect.top + scrollParent.scrollTop - 8,
-        left: rect.left - parentRect.left,
-        width: rect.width,
-      });
+    const show = () => {
+      try {
+        if (localStorage.getItem(TOOLTIP_KEY)) return;
+      } catch {}
+      setVisible(true);
     };
-
-    update();
-    // Scroll the tooltip target into view
-    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    // Re-measure after scroll
-    const timer = setTimeout(update, 400);
-    return () => clearTimeout(timer);
+    window.addEventListener('htp-closed', show);
+    return () => window.removeEventListener('htp-closed', show);
   }, []);
 
-  if (!pos) return null;
+  if (!visible) return null;
+
+  const dismiss = () => {
+    setVisible(false);
+    try { localStorage.setItem(TOOLTIP_KEY, '1'); } catch {}
+  };
 
   return (
     <div
-      ref={ref}
       style={{
-        position: 'absolute',
-        top: pos.top - 60,
-        left: pos.left,
-        width: pos.width,
-        zIndex: 35,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'flex-start',
-        pointerEvents: 'auto',
         animation: 'fade-in-up 0.3s ease-out both',
+        marginBottom: 4,
       }}
     >
       {/* Tooltip body */}
@@ -197,7 +163,7 @@ function PicksTooltipPortal({ onDismiss }: { onDismiss: () => void }) {
 
         {/* X close button */}
         <button
-          onClick={onDismiss}
+          onClick={dismiss}
           aria-label="Dismiss tooltip"
           style={{
             position: 'absolute',

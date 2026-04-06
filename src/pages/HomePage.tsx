@@ -6,6 +6,7 @@ import { getCurrentWeekInfo } from '../lib/weekUtils';
 import StreakBadge from '../components/StreakBadge';
 import RewardStatusStrip from '../components/RewardStatusStrip';
 import PickCard from '../components/PickCard';
+import { PicksTooltip } from '../components/HowToPlay';
 import { FireFlameIcon, StarIcon } from '../components/icons';
 import draftkingsAd from '/draftkings-ad.png';
 
@@ -54,6 +55,9 @@ export default function HomePage() {
 
       {/* Reward status strip */}
       <RewardStatusStrip />
+
+      {/* First-pick tooltip */}
+      <PicksTooltip />
 
       {/* Section header */}
       <div className="flex items-center justify-between">
