@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 
+const SEEN_KEY = 'streak-htp-seen';
+
 const cards = [
   {
     headline: 'Pick. Streak. Win.',
@@ -53,8 +55,34 @@ function HelpCircleIcon() {
   );
 }
 
+/** Returns true if the user has never seen the How To Play flow */
+function isFirstVisit(): boolean {
+  try { return !localStorage.getItem(SEEN_KEY); } catch { return true; }
+}
+
+function markSeen() {
+  try { localStorage.setItem(SEEN_KEY, '1'); } catch {}
+}
+
 export function HowToPlayButton() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(() => isFirstVisit());
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+    markSeen();
+    // Show tooltip after first-time close
+    if (isFirstVisit() || !localStorage.getItem(SEEN_KEY + '-tooltip-dismissed')) {
+      setShowTooltip(true);
+    }
+  };
+
+  // Also mark seen on first open
+  useEffect(() => {
+    if (open && isFirstVisit()) {
+      // Will be marked when they close
+    }
+  }, [open]);
 
   return (
     <>
@@ -83,8 +111,129 @@ export function HowToPlayButton() {
         <HelpCircleIcon />
       </button>
 
-      {open && <HowToPlayModal onClose={() => setOpen(false)} />}
+      {open && <HowToPlayModal onClose={handleClose} />}
+      {showTooltip && <PicksTooltipPortal onDismiss={() => {
+        setShowTooltip(false);
+        try { localStorage.setItem(SEEN_KEY + '-tooltip-dismissed', '1'); } catch {}
+      }} />}
     </>
+  );
+}
+
+/** Finds the Today's Picks heading and renders tooltip above it via a portal-like approach */
+function PicksTooltipPortal({ onDismiss }: { onDismiss: () => void }) {
+  const [pos, setPos] = useState<{ top: number; left: number; width: number } | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Find the "Today's Picks" heading in the DOM
+    const headings = document.querySelectorAll('h2');
+    let target: HTMLElement | null = null;
+    headings.forEach((h) => {
+      if (h.textContent?.includes("Today's Picks")) target = h.parentElement as HTMLElement;
+    });
+
+    if (!target) return;
+
+    const update = () => {
+      const scrollParent = target!.closest('main');
+      if (!scrollParent) return;
+      const parentRect = scrollParent.getBoundingClientRect();
+      const rect = target!.getBoundingClientRect();
+      setPos({
+        top: rect.top - parentRect.top + scrollParent.scrollTop - 8,
+        left: rect.left - parentRect.left,
+        width: rect.width,
+      });
+    };
+
+    update();
+    // Scroll the tooltip target into view
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Re-measure after scroll
+    const timer = setTimeout(update, 400);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (!pos) return null;
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        position: 'absolute',
+        top: pos.top - 60,
+        left: pos.left,
+        width: pos.width,
+        zIndex: 35,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        pointerEvents: 'auto',
+        animation: 'fade-in-up 0.3s ease-out both',
+      }}
+    >
+      {/* Tooltip body */}
+      <div
+        style={{
+          position: 'relative',
+          backgroundColor: 'var(--color-wins)',
+          borderRadius: 10,
+          padding: '10px 36px 10px 14px',
+          width: '100%',
+          boxSizing: 'border-box',
+        }}
+      >
+        <p style={{
+          fontFamily: 'var(--font-body)',
+          fontSize: 13,
+          fontWeight: 500,
+          lineHeight: 1.4,
+          color: '#000000',
+          margin: 0,
+        }}>
+          Make your first pick to start your streak!
+        </p>
+
+        {/* X close button */}
+        <button
+          onClick={onDismiss}
+          aria-label="Dismiss tooltip"
+          style={{
+            position: 'absolute',
+            top: 6,
+            right: 6,
+            width: 24,
+            height: 24,
+            borderRadius: '50%',
+            border: 'none',
+            background: 'rgba(0,0,0,0.15)',
+            color: '#000000',
+            fontSize: 14,
+            lineHeight: 1,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 0,
+          }}
+        >
+          &times;
+        </button>
+      </div>
+
+      {/* Caret pointing down */}
+      <div
+        style={{
+          width: 0,
+          height: 0,
+          borderLeft: '8px solid transparent',
+          borderRight: '8px solid transparent',
+          borderTop: '8px solid var(--color-wins)',
+          marginLeft: 20,
+        }}
+      />
+    </div>
   );
 }
 
