@@ -143,7 +143,7 @@ export function PicksTooltip() {
       <div
         style={{
           position: 'relative',
-          backgroundColor: 'var(--color-wins)',
+          backgroundColor: '#FF9151',
           borderRadius: 10,
           padding: '10px 36px 10px 14px',
           width: '100%',
@@ -195,7 +195,7 @@ export function PicksTooltip() {
           height: 0,
           borderLeft: '8px solid transparent',
           borderRight: '8px solid transparent',
-          borderTop: '8px solid var(--color-wins)',
+          borderTop: '8px solid #FF9151',
           marginLeft: 20,
         }}
       />
