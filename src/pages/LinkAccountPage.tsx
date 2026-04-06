@@ -15,11 +15,11 @@ export default function LinkAccountPage() {
 
       {/* Step indicators */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-2 text-sm" style={{ color: espnLinked ? '#2dcc30' : 'var(--color-theme-text-tertiary)' }}>
+        <div className="flex items-center gap-2 text-sm" style={{ color: espnLinked ? 'var(--color-earned)' : 'var(--color-theme-text-tertiary)' }}>
           <div
             className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
             style={{
-              backgroundColor: espnLinked ? '#2dcc30' : 'var(--color-theme-surface-alt)',
+              backgroundColor: espnLinked ? 'var(--color-earned)' : 'var(--color-theme-surface-alt)',
               color: espnLinked ? '#fff' : 'var(--color-theme-text-tertiary)',
             }}
           >
@@ -28,11 +28,11 @@ export default function LinkAccountPage() {
           ESPN
         </div>
         <div className="flex-1 h-px" style={{ backgroundColor: 'var(--color-theme-border)' }} />
-        <div className="flex items-center gap-2 text-sm" style={{ color: dkLinked ? '#2dcc30' : 'var(--color-theme-text-tertiary)' }}>
+        <div className="flex items-center gap-2 text-sm" style={{ color: dkLinked ? 'var(--color-earned)' : 'var(--color-theme-text-tertiary)' }}>
           <div
             className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
             style={{
-              backgroundColor: dkLinked ? '#2dcc30' : 'var(--color-theme-surface-alt)',
+              backgroundColor: dkLinked ? 'var(--color-earned)' : 'var(--color-theme-surface-alt)',
               color: dkLinked ? '#fff' : 'var(--color-theme-text-tertiary)',
             }}
           >

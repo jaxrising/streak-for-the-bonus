@@ -13,9 +13,9 @@ export default function RewardProgressBar({ type, currentValue, tiers, label }: 
   const maxThreshold = tiers[tiers.length - 1].threshold;
   const progress = Math.min((currentValue / maxThreshold) * 100, 100);
   const gradient = type === 'streak'
-    ? 'linear-gradient(to right, #2dcc30, #1a9e1d)'
-    : 'linear-gradient(to right, #3772DF, #1a4fbf)';
-  const activeColor = type === 'streak' ? '#2dcc30' : '#3772DF';
+    ? 'linear-gradient(to right, #FFDA18, #796122)'
+    : 'linear-gradient(to right, #FF9151, #A1562C)';
+  const activeColor = type === 'streak' ? 'var(--color-streak)' : 'var(--color-wins)';
 
   return (
     <div

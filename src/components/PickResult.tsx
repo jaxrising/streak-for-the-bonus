@@ -37,7 +37,7 @@ export default function PickResult() {
         {/* Top accent bar */}
         <div
           className="h-1"
-          style={{ backgroundColor: isWin ? '#2dcc30' : '#ff3232' }}
+          style={{ backgroundColor: isWin ? 'var(--color-earned)' : '#ff3232' }}
         />
 
         {/* Content area — matches Figma modal Content node */}
@@ -46,7 +46,7 @@ export default function PickResult() {
           <div
             className="flex items-center justify-center w-16 h-16 rounded-full"
             style={{
-              backgroundColor: isWin ? 'rgba(45, 204, 48, 0.12)' : 'rgba(255, 50, 50, 0.12)',
+              backgroundColor: isWin ? 'color-mix(in srgb, var(--color-earned) 12%, transparent)' : 'rgba(255, 50, 50, 0.12)',
             }}
           >
             <svg
@@ -54,7 +54,7 @@ export default function PickResult() {
               height="28"
               viewBox="0 0 24 24"
               fill="none"
-              stroke={isWin ? '#2dcc30' : '#ff3232'}
+              stroke={isWin ? 'var(--color-earned)' : '#ff3232'}
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -105,7 +105,7 @@ export default function PickResult() {
             >
               <span
                 className="text-2xl font-bold font-display tabular-nums"
-                style={{ color: isWin ? '#3772DF' : 'var(--color-theme-text-muted)' }}
+                style={{ color: isWin ? 'var(--color-streak)' : 'var(--color-theme-text-muted)' }}
               >
                 {weeklyStreak}
               </span>

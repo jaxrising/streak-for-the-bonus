@@ -73,21 +73,23 @@
 
   /* ESPN Design System — Brand */
   --color-espn-red: #f51825;
-  --color-espn-blue: #3772df;
   --color-espn-gold: #ffc432;
 
   /* ESPN Design System — Accent */
-  --color-accent: #3772DF;
+  --color-accent: #FFDA18;
   --color-accent-light: #d9ff5c;
 
   /* ESPN Design System — Status */
-  --color-status-success: #2dcc30;
+  --color-status-success: #51FF77;
+  --color-earned: #51FF77;
   --color-status-error: #ff3232;
   --color-status-warning: #ff7700;
   --color-status-neutral: #666666;
 
   /* Streak glow (app-specific) */
-  --color-streak-glow: #CFFF18;
+  --color-streak-glow: #FFDA18;
+  --color-streak: #FFDA18;
+  --color-wins: #FF9151;
 
   /* ESPN Design System — Font Families */
   --font-display: 'ESPN Ignite Display', Impact, 'Arial Black', sans-serif;
@@ -223,41 +225,33 @@
 
   /* Scrollbar */
   --color-theme-scrollbar: #cccccc;      /* color.neutral.300 */
+
+  /* Earned/success — darker green for light bg */
+  --color-earned: #267A38;
+  --color-status-success: #267A38;
+
+  /* Streak/wins — darker for light bg accessibility */
+  --color-streak: #796122;
+  --color-wins: #A1562C;
 }
 
 /*
- * Header bar — themed
- * Dark: lime bg, black text
- * Light: black bg, white text
- * Tab selected state: #CFFF18 in both themes
+ * Header bar — black bg, white text in both themes
+ * Tab selected state: #FFDA18 in both themes
  */
-[data-theme="dark"] .header-bar,
-:root .header-bar {
-  background-color: #CFFF18;
-}
-[data-theme="dark"] .header-text,
-:root .header-text {
-  color: #000000;
-}
-[data-theme="dark"] .header-streak-pill,
-:root .header-streak-pill {
-  background-color: rgba(0, 0, 0, 0.15);
-}
-
-[data-theme="light"] .header-bar {
+.header-bar {
   background-color: #000000;
 }
-[data-theme="light"] .header-text {
+.header-text {
   color: #ffffff;
 }
-[data-theme="light"] .header-streak-pill {
+.header-streak-pill {
   background-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Native iOS status bar — inherits header bar color, hidden on desktop */
-[data-theme="dark"] .native-status-bar,
-:root .native-status-bar {
-  background-color: #CFFF18;
+/* Native iOS status bar — black bg, white text in both themes, hidden on desktop */
+.native-status-bar {
+  background-color: #000000;
 }
 
 @container app (min-width: 1024px) {
@@ -265,30 +259,29 @@
     display: none;
   }
 }
-[data-theme="dark"] .native-status-text,
-:root .native-status-text {
-  color: #000000;
-}
-[data-theme="dark"] .native-status-icon,
-:root .native-status-icon {
-  fill: #000000;
-}
-[data-theme="dark"] .native-status-stroke,
-:root .native-status-stroke {
-  color: #000000;
-}
-
-[data-theme="light"] .native-status-bar {
-  background-color: #000000;
-}
-[data-theme="light"] .native-status-text {
+.native-status-text {
   color: #ffffff;
 }
-[data-theme="light"] .native-status-icon {
+.native-status-icon {
   fill: #ffffff;
 }
-[data-theme="light"] .native-status-stroke {
+.native-status-stroke {
   color: #ffffff;
+}
+
+/*
+ * How To Play CTA — theme-adaptive
+ * Dark: #FFDA18 bg, black text
+ * Light: black bg, #FFDA18 text
+ */
+[data-theme="dark"] .htp-cta,
+:root .htp-cta {
+  background-color: #FFDA18;
+  color: #000000;
+}
+[data-theme="light"] .htp-cta {
+  background-color: #000000;
+  color: #FFDA18;
 }
 
 /*

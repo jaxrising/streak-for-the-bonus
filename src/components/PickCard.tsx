@@ -44,7 +44,7 @@ function PickButton({
       style={{
         backgroundColor: 'var(--color-theme-surface-alt)',
         color: isSelected ? 'var(--color-theme-text)' : 'var(--color-theme-text-secondary)',
-        ...(isSelected ? { '--tw-ring-color': '#3772DF' } as React.CSSProperties : {}),
+        ...(isSelected ? { '--tw-ring-color': 'var(--color-theme-text)' } as React.CSSProperties : {}),
       }}
     >
       {/* Glow container — glow fades naturally, no hard clip */}
@@ -126,7 +126,7 @@ function PickButton({
       {odds && (
         <span
           className="relative z-10 text-[12px] leading-[14px] tracking-[0.02em] font-body shrink-0 pr-3 pl-2"
-          style={{ color: isSelected ? '#3772DF' : 'var(--color-theme-text-muted)' }}
+          style={{ color: isSelected ? 'var(--color-theme-text)' : 'var(--color-theme-text-muted)' }}
         >
           {odds}
         </span>
@@ -150,7 +150,7 @@ export default function PickCard({ offering, index }: PickCardProps) {
     <div
       className={`pick-card-container border rounded-xl p-4 transition-all duration-300 animate-fade-in-up ${
         isActive
-          ? 'shadow-[0_0_20px_rgba(55,114,223,0.3)]'
+          ? 'shadow-[0_0_20px_rgba(255,255,255,0.15)]'
           : isDisabled
           ? 'opacity-50'
           : ''
@@ -158,7 +158,7 @@ export default function PickCard({ offering, index }: PickCardProps) {
       style={{
         animationDelay: `${index * 60}ms`,
         backgroundColor: 'var(--color-theme-surface)',
-        borderColor: isActive ? '#3772DF' : 'var(--color-theme-border)',
+        borderColor: isActive ? 'var(--color-theme-text)' : 'var(--color-theme-border)',
       }}
     >
       <div className="flex items-center gap-2 mb-3">

@@ -10,13 +10,12 @@ export default function RewardTierCard({ tier, index }: { tier: RewardTier; inde
 
   return (
     <div
-      className={`relative border rounded-xl p-5 transition-all duration-300 animate-fade-in-up ${
-        unlocked ? 'shadow-[0_0_15px_rgba(55,114,223,0.15)]' : ''
-      }`}
+      className="relative border rounded-xl p-5 transition-all duration-300 animate-fade-in-up"
       style={{
         animationDelay: `${index * 100}ms`,
         backgroundColor: 'var(--color-theme-surface)',
-        borderColor: unlocked ? 'rgba(55, 114, 223, 0.5)' : 'var(--color-theme-border)',
+        borderColor: unlocked ? 'var(--color-earned)' : 'var(--color-theme-border)',
+        boxShadow: unlocked ? '0 0 15px color-mix(in srgb, var(--color-earned) 15%, transparent)' : 'none',
         opacity: unlocked ? 1 : 0.7,
       }}
     >
@@ -31,8 +30,8 @@ export default function RewardTierCard({ tier, index }: { tier: RewardTier; inde
         <span
           className="text-[10px] leading-[12px] tracking-[0.04em] uppercase font-bold font-title px-1.5 py-0.5 rounded"
           style={{
-            backgroundColor: tier.type === 'streak' ? 'rgba(45,204,48,0.1)' : 'rgba(55,114,223,0.1)',
-            color: tier.type === 'streak' ? '#2dcc30' : '#3772DF',
+            backgroundColor: tier.type === 'streak' ? 'color-mix(in srgb, var(--color-streak) 10%, transparent)' : 'color-mix(in srgb, var(--color-wins) 10%, transparent)',
+            color: tier.type === 'streak' ? 'var(--color-streak)' : 'var(--color-wins)',
           }}
         >
           {tier.type}
@@ -47,7 +46,7 @@ export default function RewardTierCard({ tier, index }: { tier: RewardTier; inde
       <p className="text-xs mb-3" style={{ color: 'var(--color-theme-text-tertiary)' }}>{tier.description}</p>
       <div
         className="text-[14px] leading-[20px] font-bold font-title"
-        style={{ color: unlocked ? '#2dcc30' : 'var(--color-theme-text-muted)' }}
+        style={{ color: unlocked ? 'var(--color-earned)' : 'var(--color-theme-text-muted)' }}
       >
         {tier.prize}
       </div>

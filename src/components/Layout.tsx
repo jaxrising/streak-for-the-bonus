@@ -87,14 +87,14 @@ export default function Layout() {
                 }`
               }
               style={({ isActive }) => ({
-                color: isActive ? '#CFFF18' : 'var(--color-theme-nav-inactive)',
+                color: isActive ? '#FFDA18' : 'var(--color-theme-nav-inactive)',
               })}
             >
               {({ isActive }) => (
                 <>
                   <span>{tab.label}</span>
                   {isActive && (
-                    <div className="absolute bottom-0 left-0 right-0 h-[3px] rounded-t-sm" style={{ backgroundColor: '#CFFF18' }} />
+                    <div className="absolute bottom-0 left-0 right-0 h-[3px] rounded-t-sm" style={{ backgroundColor: '#FFDA18' }} />
                   )}
                 </>
               )}

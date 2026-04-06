@@ -32,8 +32,8 @@ export default function ProfilePage() {
       {/* Stats grid */}
       <div className="grid grid-cols-4 gap-2">
         {[
-          { label: 'Streak', value: weeklyStreak, color: '#3772DF' },
-          { label: 'Weekly W', value: weeklyWins, color: '#2dcc30' },
+          { label: 'Streak', value: weeklyStreak, color: 'var(--color-streak)' },
+          { label: 'Weekly W', value: weeklyWins, color: 'var(--color-wins)' },
           { label: 'All-Time', value: allTimeWins, color: 'var(--color-theme-text)' },
           { label: 'Win %', value: `${winRate}%`, color: '#ffc432' },
         ].map((stat) => (

@@ -22,7 +22,7 @@ export default function RewardStatusStrip() {
           Streak
         </div>
         {streakUnlocked ? (
-          <div className="text-[13px] leading-[18px] font-bold font-title flex items-center justify-center gap-1" style={{ color: '#63ca3e' }}>
+          <div className="text-[13px] leading-[18px] font-bold font-title flex items-center justify-center gap-1" style={{ color: 'var(--color-earned)' }}>
             <Icon name={streakUnlocked.icon} size={16} /> {streakUnlocked.prize}
           </div>
         ) : streakNext ? (
@@ -45,7 +45,7 @@ export default function RewardStatusStrip() {
           Wins
         </div>
         {winsUnlocked ? (
-          <div className="text-[13px] leading-[18px] font-bold font-title flex items-center justify-center gap-1" style={{ color: '#63ca3e' }}>
+          <div className="text-[13px] leading-[18px] font-bold font-title flex items-center justify-center gap-1" style={{ color: 'var(--color-earned)' }}>
             <Icon name={winsUnlocked.icon} size={16} /> {winsUnlocked.prize}
           </div>
         ) : winsNext ? (

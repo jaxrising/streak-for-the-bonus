@@ -45,7 +45,7 @@ export default function ActivePickBanner() {
         <div className="toast-content">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="text-[12px] leading-[14px] tracking-[0.02em] font-title" style={{ color: '#3772DF' }}>
+              <span className="text-[12px] leading-[14px] tracking-[0.02em] font-title" style={{ color: 'var(--color-streak)' }}>
                 Resolving Pick
               </span>
             </div>
@@ -64,7 +64,7 @@ export default function ActivePickBanner() {
             <div
               className="h-full rounded-r-full"
               style={{
-                background: 'linear-gradient(to right, #3772DF, #1a4fbf)',
+                background: 'linear-gradient(to right, #FFDA18, #796122)',
                 animation: `countdown-bar ${RESOLVE_DELAY_MS}ms linear forwards`,
               }}
             />

@@ -28,8 +28,8 @@ export default function LeaderboardTable({ users, sortBy }: LeaderboardTableProp
           key={user.username}
           className="flex items-center gap-3 p-3 rounded-xl transition-all animate-fade-in-up border"
           style={{
-            backgroundColor: user.isCurrentUser ? 'rgba(55, 114, 223, 0.1)' : 'var(--color-theme-surface)',
-            borderColor: user.isCurrentUser ? 'rgba(55, 114, 223, 0.3)' : 'var(--color-theme-border)',
+            backgroundColor: user.isCurrentUser ? 'var(--color-theme-surface-alt)' : 'var(--color-theme-surface)',
+            borderColor: user.isCurrentUser ? 'var(--color-theme-text)' : 'var(--color-theme-border)',
           }}
           data-delay={`${i * 50}ms`}
         >
@@ -38,7 +38,7 @@ export default function LeaderboardTable({ users, sortBy }: LeaderboardTableProp
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-[14px] leading-[20px] font-medium truncate"
-              style={{ color: user.isCurrentUser ? '#3772DF' : 'var(--color-theme-text)' }}
+              style={{ color: 'var(--color-theme-text)', fontWeight: user.isCurrentUser ? 700 : 500 }}
             >
               {user.username}
             </div>

@@ -224,7 +224,7 @@ function HowToPlayModal({ onClose }: { onClose: () => void }) {
                   border: 'none',
                   padding: 0,
                   cursor: 'pointer',
-                  backgroundColor: i === current ? '#CFFF18' : 'var(--color-theme-text-muted)',
+                  backgroundColor: i === current ? 'var(--color-streak)' : 'var(--color-theme-text-muted)',
                   transition: 'all 0.2s ease',
                 }}
               />
@@ -240,13 +240,12 @@ function HowToPlayModal({ onClose }: { onClose: () => void }) {
                 scrollTo(current + 1);
               }
             }}
+            className="htp-cta"
             style={{
               width: '100%',
               height: 40,
               borderRadius: 100,
               border: 'none',
-              backgroundColor: '#CFFF18',
-              color: '#000000',
               fontFamily: 'var(--font-title)',
               fontSize: 14,
               fontWeight: 700,

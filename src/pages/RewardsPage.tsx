@@ -36,7 +36,7 @@ export default function RewardsPage() {
         <div className="text-[12px] leading-[14px] tracking-[0.02em] uppercase font-title mb-2" style={{ color: 'var(--color-theme-text-tertiary)' }}>
           Bonus Bets Available
         </div>
-        <div className="text-[36px] leading-[40px] font-display font-black tabular-nums" style={{ color: totalBonusBets > 0 ? '#2dcc30' : 'var(--color-theme-text)' }}>
+        <div className="text-[36px] leading-[40px] font-display font-black tabular-nums" style={{ color: totalBonusBets > 0 ? 'var(--color-earned)' : 'var(--color-theme-text)' }}>
           ${totalBonusBets}
         </div>
         <div className="text-[12px] leading-[14px] tracking-[0.02em] font-body mt-2" style={{ color: 'var(--color-theme-text-muted)' }}>
