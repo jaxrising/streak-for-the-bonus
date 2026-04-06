@@ -2,6 +2,7 @@ import { NavLink, Link, Outlet } from 'react-router-dom';
 import { useGameStore } from '../store/gameStore';
 import PickResult from './PickResult';
 import ActivePickBanner from './ActivePickBanner';
+import { HowToPlayButton } from './HowToPlay';
 import { PersonIcon } from './icons';
 
 const tabs = [
@@ -51,7 +52,7 @@ export default function Layout() {
   return (
     <div
       className="app-shell relative flex flex-col transition-colors duration-200"
-      style={{ backgroundColor: 'var(--color-theme-bg)', color: 'var(--color-theme-text)', minHeight: '100%' }}
+      style={{ backgroundColor: 'var(--color-theme-bg)', color: 'var(--color-theme-text)', height: '100%' }}
     >
       {/* Header */}
       <header className="sticky top-0 z-40">
@@ -108,6 +109,9 @@ export default function Layout() {
           <Outlet />
         </div>
       </main>
+
+      {/* How to play FAB — positioned over the app shell, not in scroll flow */}
+      <HowToPlayButton />
 
       {/* Active pick toast */}
       <ActivePickBanner />
