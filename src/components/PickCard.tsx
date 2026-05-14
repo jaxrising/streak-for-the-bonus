@@ -195,11 +195,12 @@ export default function PickCard({ offering, index }: PickCardProps) {
           : isDisabled && !isSelected
           ? 'opacity-50'
           : ''
-      }`}
+      } ${hoveredSide ? 'z-50' : ''}`}
       style={{
         animationDelay: `${index * 60}ms`,
         backgroundColor: 'var(--color-theme-surface)',
         borderColor: isSelected ? 'var(--color-theme-text)' : 'var(--color-theme-border)',
+        overflow: 'visible',
       }}
     >
       <div className="flex items-center gap-2 mb-3">
@@ -244,40 +245,40 @@ export default function PickCard({ offering, index }: PickCardProps) {
       {/* Tooltip — rendered at card level to avoid overflow clipping */}
       {activeTooltip && (
         <div
-          className="absolute z-50 pointer-events-none"
+          className="absolute pointer-events-none"
           style={{
-            right: 24,
+            zIndex: 9999,
+            right: 0,
+            paddingRight: 24,
             top: hoveredSide === 'A' ? 52 : 110,
-            transform: 'translateY(-100%) translateX(25%)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            width: 'fit-content',
+            transform: 'translateY(-100%)',
           }}
         >
-          <div
-            style={{
-              backgroundColor: '#FF9151',
-              borderRadius: 10,
-              padding: '8px 12px',
-              fontSize: 13,
-              fontWeight: 500,
-              color: '#000000',
-              whiteSpace: 'nowrap',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-            }}
-          >
-            {activeTooltip}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div
+              style={{
+                backgroundColor: '#FF9151',
+                borderRadius: 10,
+                padding: '8px 12px',
+                fontSize: 13,
+                fontWeight: 500,
+                color: '#000000',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+              }}
+            >
+              {activeTooltip}
+            </div>
+            <div
+              style={{
+                width: 0,
+                height: 0,
+                borderLeft: '6px solid transparent',
+                borderRight: '6px solid transparent',
+                borderTop: '6px solid #FF9151',
+              }}
+            />
           </div>
-          <div
-            style={{
-              width: 0,
-              height: 0,
-              borderLeft: '6px solid transparent',
-              borderRight: '6px solid transparent',
-              borderTop: '6px solid #FF9151',
-            }}
-          />
         </div>
       )}
     </div>
