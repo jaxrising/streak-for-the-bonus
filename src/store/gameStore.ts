@@ -1,5 +1,6 @@
 import { create } from 'zustand';
-import type { ActivePick, PickRecord, PickSide, Offering } from '../types';
+import type { Achievement, ActivePick, PickRecord, PickSide, Offering } from '../types';
+import { achievements } from '../data/rewards';
 
 const USE_FIREBASE = import.meta.env.VITE_USE_FIREBASE === 'true';
 
@@ -22,6 +23,7 @@ interface GameState {
   espnLinked: boolean;
   dkLinked: boolean;
   uid: string | null;
+  newlyEarnedAchievement: Achievement | null;
 
   selectPick: (offering: Offering, side: PickSide) => void;
   submitPick: () => void;
@@ -33,6 +35,7 @@ interface GameState {
   linkDK: () => void;
   setUser: (uid: string | null) => void;
   syncFromFirebase: (data: { weeklyStreak: number; weeklyWins: number; allTimeWins: number }) => void;
+  clearAchievementToast: () => void;
 }
 
 export const useGameStore = create<GameState>((set, get) => ({
@@ -47,6 +50,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   pickHistory: [],
   espnLinked: false,
   dkLinked: false,
+  newlyEarnedAchievement: null,
 
   selectPick: (offering, side) => {
     const state = get();
@@ -151,13 +155,31 @@ export const useGameStore = create<GameState>((set, get) => ({
         : r
     );
 
+    const newStreak = won ? state.weeklyStreak + 1 : 0;
+    const newWeeklyWins = won ? state.weeklyWins + 1 : state.weeklyWins;
+    const newAllTimeWins = won ? state.allTimeWins + 1 : state.allTimeWins;
+
     set({
       activePick: null,
-      weeklyStreak: won ? state.weeklyStreak + 1 : 0,
-      weeklyWins: won ? state.weeklyWins + 1 : state.weeklyWins,
-      allTimeWins: won ? state.allTimeWins + 1 : state.allTimeWins,
+      weeklyStreak: newStreak,
+      weeklyWins: newWeeklyWins,
+      allTimeWins: newAllTimeWins,
       pickHistory: updatedHistory,
     });
+
+    if (won) {
+      const previouslyEarned = new Set(
+        achievements
+          .filter((a) => a.condition(state.weeklyWins, state.weeklyStreak, state.allTimeWins))
+          .map((a) => a.id)
+      );
+      const newlyEarned = achievements.find(
+        (a) => !previouslyEarned.has(a.id) && a.condition(newWeeklyWins, newStreak, newAllTimeWins)
+      );
+      if (newlyEarned) {
+        set({ newlyEarnedAchievement: newlyEarned });
+      }
+    }
 
     if (USE_FIREBASE && state.uid) {
       import('../firebase/collections').then(({ resolvePick: resolvePickFB }) => {
@@ -187,6 +209,7 @@ export const useGameStore = create<GameState>((set, get) => ({
 
   linkESPN: () => set({ espnLinked: true }),
   linkDK: () => set({ dkLinked: true }),
+  clearAchievementToast: () => set({ newlyEarnedAchievement: null }),
 
   setUser: (uid) => set({ uid }),
 

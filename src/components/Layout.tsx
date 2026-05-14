@@ -1,6 +1,7 @@
 import { NavLink, Link, Outlet } from 'react-router-dom';
 import { HowToPlayButton } from './HowToPlay';
 import SubmitPickBar from './SubmitPickBar';
+import AchievementToast from './AchievementToast';
 import { PersonIcon } from './icons';
 
 
@@ -230,6 +231,9 @@ export default function Layout() {
 
       {/* How to play FAB */}
       <HowToPlayButton />
+
+      {/* Achievement toast */}
+      <AchievementToast />
 
       {/* Submit pick sticky bar */}
       <SubmitPickBar />
