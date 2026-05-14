@@ -1,4 +1,4 @@
-export type Sport = 'NFL' | 'NBA' | 'NHL' | 'MLB' | 'Soccer' | 'Golf';
+export type Sport = 'NFL' | 'NBA' | 'NHL' | 'MLB' | 'Soccer' | 'Golf' | 'WNBA' | 'WWE';
 
 export interface Offering {
   id: string;
@@ -19,6 +19,8 @@ export interface Offering {
   watermarkB?: string;
   oddsA?: string;
   oddsB?: string;
+  pickPctA?: number;
+  pickPctB?: number;
   startTime: string;
   confidence?: number;
 }
@@ -31,6 +33,7 @@ export interface ActivePick {
   side: PickSide;
   chosenOption: string;
   startedAt: number;
+  offering: Offering;
 }
 
 export interface PickRecord {
@@ -52,6 +55,9 @@ export interface LeaderboardUser {
   weeklyStreak: number;
   weeklyWins: number;
   allTimeWins: number;
+  dailyPicks: number;
+  weeklyPicks: number;
+  allTimePicks: number;
   isCurrentUser?: boolean;
 }
 

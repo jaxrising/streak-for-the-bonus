@@ -28,6 +28,29 @@ export function getCurrentWeekInfo() {
   return { weekNumber, startDate: start, endDate: end, label };
 }
 
+const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+export function getWeekDays(weekOffset: number = 0): { date: Date; dayName: string; dateLabel: string }[] {
+  const now = new Date();
+  const { start } = getWeekBounds(now);
+  start.setDate(start.getDate() + weekOffset * 7);
+  const days: { date: Date; dayName: string; dateLabel: string }[] = [];
+  for (let i = 0; i < 7; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    days.push({
+      date: d,
+      dayName: DAY_NAMES[d.getDay()],
+      dateLabel: `${MONTHS[d.getMonth()]} ${d.getDate()}`,
+    });
+  }
+  return days;
+}
+
+export function isSameDay(a: Date, b: Date): boolean {
+  return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+}
+
 export function getWeekEndCountdown() {
   const now = new Date();
   const { end } = getWeekBounds(now);

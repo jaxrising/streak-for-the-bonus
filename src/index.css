@@ -464,3 +464,236 @@ body {
   .team-name-short { display: none !important; }
   .team-name-full { display: block !important; }
 }
+
+/*
+ * Entry Card — Fire Effect Animations
+ * Progressive intensity based on streak length via BEM-style state classes.
+ */
+
+/* DK Crown logo — theme-adaptive via currentColor */
+.entry-card__dk-logo {
+  color: var(--color-theme-text-tertiary);
+}
+
+/* Shared particle layer styles */
+.entry-card__embers,
+.entry-card__flames,
+.entry-card__inferno {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+/* --- WARM (streak 3–4): sparse slow embers --- */
+.entry-card--warm {
+  border-color: color-mix(in srgb, var(--color-streak-glow) 30%, var(--color-theme-border));
+}
+
+.entry-card--warm .entry-card__embers::before,
+.entry-card--warm .entry-card__embers::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-wins);
+  opacity: 0;
+  animation: ember-rise 3s ease-out infinite;
+}
+
+.entry-card--warm .entry-card__embers::before {
+  left: 20%;
+  bottom: 0;
+  animation-delay: 0s;
+}
+
+.entry-card--warm .entry-card__embers::after {
+  left: 70%;
+  bottom: 0;
+  animation-delay: 1.5s;
+}
+
+/* --- HOT (streak 5–6): more embers + flame wisps + orange glow border --- */
+.entry-card--hot {
+  border-color: var(--color-wins);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--color-wins) 40%, transparent),
+              inset 0 0 8px color-mix(in srgb, var(--color-wins) 10%, transparent);
+}
+
+.entry-card--hot .entry-card__embers::before,
+.entry-card--hot .entry-card__embers::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-wins);
+  opacity: 0;
+  animation: ember-rise 2.2s ease-out infinite;
+}
+
+.entry-card--hot .entry-card__embers::before {
+  left: 15%;
+  bottom: 0;
+  animation-delay: 0s;
+}
+
+.entry-card--hot .entry-card__embers::after {
+  left: 55%;
+  bottom: 0;
+  animation-delay: 0.8s;
+}
+
+.entry-card--hot .entry-card__embers {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-wins) 8%, transparent) 0%,
+    transparent 20%
+  );
+}
+
+/* --- BLAZING (streak 7–9): dense embers + visible flames + intense glow --- */
+.entry-card--blazing {
+  border-color: var(--color-streak-glow);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--color-streak-glow) 50%, transparent),
+              0 0 40px color-mix(in srgb, var(--color-wins) 25%, transparent),
+              inset 0 0 12px color-mix(in srgb, var(--color-wins) 15%, transparent);
+}
+
+.entry-card--blazing .entry-card__embers::before,
+.entry-card--blazing .entry-card__embers::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--color-streak-glow);
+  opacity: 0;
+  animation: ember-rise 1.8s ease-out infinite;
+}
+
+.entry-card--blazing .entry-card__embers::before {
+  left: 10%;
+  bottom: 0;
+  animation-delay: 0s;
+}
+
+.entry-card--blazing .entry-card__embers::after {
+  left: 45%;
+  bottom: 0;
+  animation-delay: 0.6s;
+}
+
+.entry-card--blazing .entry-card__flames {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-wins) 20%, transparent) 0%,
+    color-mix(in srgb, var(--color-streak-glow) 8%, transparent) 15%,
+    transparent 25%
+  );
+  animation: flame-flicker 2s ease-in-out infinite alternate;
+}
+
+/* --- INFERNO (streak 10+): maximum fire + shimmer + dense flames --- */
+.entry-card--inferno {
+  border-color: var(--color-streak-glow);
+  box-shadow: 0 0 30px color-mix(in srgb, var(--color-streak-glow) 60%, transparent),
+              0 0 60px color-mix(in srgb, var(--color-wins) 35%, transparent),
+              inset 0 0 20px color-mix(in srgb, var(--color-wins) 20%, transparent);
+  animation: inferno-pulse 1.5s ease-in-out infinite alternate;
+}
+
+.entry-card--inferno .entry-card__embers::before,
+.entry-card--inferno .entry-card__embers::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-streak-glow);
+  opacity: 0;
+  animation: ember-rise 1.2s ease-out infinite;
+}
+
+.entry-card--inferno .entry-card__embers::before {
+  left: 8%;
+  bottom: 0;
+  animation-delay: 0s;
+}
+
+.entry-card--inferno .entry-card__embers::after {
+  left: 40%;
+  bottom: 0;
+  animation-delay: 0.4s;
+}
+
+.entry-card--inferno .entry-card__flames {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-wins) 30%, transparent) 0%,
+    color-mix(in srgb, var(--color-streak-glow) 15%, transparent) 20%,
+    transparent 35%
+  );
+  animation: flame-flicker 1.2s ease-in-out infinite alternate;
+}
+
+.entry-card--inferno .entry-card__inferno {
+  background: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-streak-glow) 10%, transparent) 0%,
+    transparent 40%
+  );
+  animation: inferno-shimmer 0.8s ease-in-out infinite alternate;
+}
+
+/* Keyframes */
+@keyframes ember-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-60px) scale(0.3) translateX(10px);
+    opacity: 0;
+  }
+}
+
+@keyframes flame-flicker {
+  0% {
+    opacity: 0.7;
+    transform: scaleY(1);
+  }
+  100% {
+    opacity: 1;
+    transform: scaleY(1.05);
+  }
+}
+
+@keyframes inferno-pulse {
+  0% {
+    box-shadow: 0 0 30px color-mix(in srgb, var(--color-streak-glow) 60%, transparent),
+                0 0 60px color-mix(in srgb, var(--color-wins) 35%, transparent),
+                inset 0 0 20px color-mix(in srgb, var(--color-wins) 20%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 40px color-mix(in srgb, var(--color-streak-glow) 80%, transparent),
+                0 0 80px color-mix(in srgb, var(--color-wins) 50%, transparent),
+                inset 0 0 25px color-mix(in srgb, var(--color-wins) 30%, transparent);
+  }
+}
+
+@keyframes inferno-shimmer {
+  0% {
+    opacity: 0.6;
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(8px);
+  }
+}

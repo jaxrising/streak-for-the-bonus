@@ -1,11 +1,16 @@
 import { useMemo } from 'react';
 import { useGameStore } from '../store/gameStore';
+import { useAuthStore } from '../store/authStore';
+import { signOut } from '../firebase/auth';
 import { achievements } from '../data/rewards';
 import { AchievementCardLarge, AchievementGridItem } from '../components/AchievementBadge';
 import PickHistoryList from '../components/PickHistoryList';
 
+const USE_FIREBASE = import.meta.env.VITE_USE_FIREBASE === 'true';
+
 export default function ProfilePage() {
   const { weeklyStreak, weeklyWins, allTimeWins, pickHistory } = useGameStore();
+  const profile = useAuthStore((s) => s.profile);
 
   const computedAchievements = useMemo(
     () =>
@@ -25,8 +30,12 @@ export default function ProfilePage() {
     <div className="space-y-6">
       {/* Profile header */}
       <div className="text-center">
-        <h2 className="text-[20px] leading-[26px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>You</h2>
-        <p className="text-sm" style={{ color: 'var(--color-theme-text-tertiary)' }}>Streak Player</p>
+        <h2 className="text-[20px] leading-[26px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>
+          {USE_FIREBASE && profile ? profile.displayName : 'You'}
+        </h2>
+        <p className="text-sm" style={{ color: 'var(--color-theme-text-tertiary)' }}>
+          {USE_FIREBASE && profile ? profile.email : 'Streak Player'}
+        </p>
       </div>
 
       {/* Stats grid */}
@@ -93,6 +102,19 @@ export default function ProfilePage() {
         </h3>
         <PickHistoryList />
       </div>
+
+      {/* Sign out */}
+      {USE_FIREBASE && (
+        <div className="pt-4 text-center">
+          <button
+            onClick={() => signOut()}
+            className="text-xs underline transition-colors"
+            style={{ color: 'var(--color-theme-text-muted)' }}
+          >
+            Sign Out
+          </button>
+        </div>
+      )}
     </div>
   );
 }

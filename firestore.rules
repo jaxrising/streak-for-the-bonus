@@ -1,0 +1,24 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Users: read own profile, write own profile
+    match /users/{uid} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Picks: anyone authenticated can read (for pick %), write own picks
+    match /picks/{pickId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow update: if false; // Only Cloud Functions can resolve picks
+    }
+
+    // Leaderboard: public read, no client writes
+    match /leaderboard/{entry} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

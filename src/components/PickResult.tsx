@@ -1,4 +1,5 @@
 import { useGameStore } from '../store/gameStore';
+import draftkingsAd from '../assets/Draft Kings Ad.png';
 
 export default function PickResult() {
   const { lastResult, weeklyStreak, clearResult } = useGameStore();
@@ -124,6 +125,13 @@ export default function PickResult() {
               {isWin ? 'Keep Going' : 'Try Again'}
             </button>
           </div>
+
+          {/* DraftKings ad */}
+          <img
+            src={draftkingsAd}
+            alt="DraftKings"
+            className="w-full rounded-lg mt-1"
+          />
         </div>
       </div>
     </div>

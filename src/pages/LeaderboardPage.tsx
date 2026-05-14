@@ -4,9 +4,17 @@ import { useGameStore } from '../store/gameStore';
 import LeaderboardTable from '../components/LeaderboardTable';
 
 type TimeFrame = 'daily' | 'weekly' | 'allTime';
+type Category = 'streak' | 'wins' | 'winPct';
+
+const categories: { value: Category; label: string }[] = [
+  { value: 'streak', label: 'Streak' },
+  { value: 'wins', label: 'Wins' },
+  { value: 'winPct', label: 'Win %' },
+];
 
 export default function LeaderboardPage() {
   const [timeFrame, setTimeFrame] = useState<TimeFrame>('weekly');
+  const [category, setCategory] = useState<Category>('streak');
   const { weeklyStreak, weeklyWins, allTimeWins } = useGameStore();
 
   const users = useMemo(() =>
@@ -44,7 +52,27 @@ export default function LeaderboardPage() {
         </select>
       </div>
 
-      <LeaderboardTable users={users} sortBy={timeFrame} />
+      <div
+        className="flex rounded-lg p-1 gap-1"
+        style={{ backgroundColor: 'var(--color-theme-surface)' }}
+      >
+        {categories.map((cat) => (
+          <button
+            key={cat.value}
+            onClick={() => setCategory(cat.value)}
+            className="flex-1 text-[12px] leading-[14px] tracking-[0.02em] font-body font-medium py-2 rounded-md transition-all"
+            style={{
+              backgroundColor: category === cat.value ? 'var(--color-theme-surface-alt)' : 'transparent',
+              color: category === cat.value ? 'var(--color-theme-text)' : 'var(--color-theme-text-muted)',
+              boxShadow: category === cat.value ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+            }}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
+
+      <LeaderboardTable users={users} timeFrame={timeFrame} category={category} />
     </div>
   );
 }

@@ -1,60 +1,60 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useGameStore } from '../store/gameStore';
-import { offerings } from '../data/offerings';
-import { resolveOutcome, RESOLVE_DELAY_MS } from '../lib/resolution';
-import { getCurrentWeekInfo } from '../lib/weekUtils';
-import StreakBadge from '../components/StreakBadge';
-import RewardStatusStrip from '../components/RewardStatusStrip';
+import { useOfferings } from '../lib/useOfferings';
+import { checkGameResults, determinePickOutcome } from '../lib/resolveFromResults';
+import EntryCard from '../components/EntryCard';
 import PickCard from '../components/PickCard';
+import SportFilterChips, { type SportFilter } from '../components/SportFilterChips';
 import { PicksTooltip } from '../components/HowToPlay';
-import { FireFlameIcon, StarIcon } from '../components/icons';
-import draftkingsAd from '/draftkings-ad.png';
 
 export default function HomePage() {
-  const { activePick, resolvePick, weeklyWins, weeklyStreak, resetDemo } = useGameStore();
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const weekInfo = getCurrentWeekInfo();
+  const { activePick, resolvePick, resetDemo } = useGameStore();
+  const { offerings, loading } = useOfferings();
+  const [sportFilter, setSportFilter] = useState<SportFilter>('all');
 
-  const resolve = useCallback(() => {
-    const won = resolveOutcome();
-    resolvePick(won);
-  }, [resolvePick]);
+  const availableLeagues = useMemo(() => {
+    return [...new Set(offerings.map(o => o.league))];
+  }, [offerings]);
+
+  const filteredOfferings = useMemo(() => {
+    if (sportFilter === 'all') return offerings;
+    return offerings.filter(o => o.league === sportFilter);
+  }, [sportFilter, offerings]);
 
   useEffect(() => {
     if (!activePick) return;
-    timerRef.current = setTimeout(resolve, RESOLVE_DELAY_MS);
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
+
+    const offering = offerings.find((o) => o.id === activePick.offeringId);
+    if (!offering) return;
+
+    let cancelled = false;
+
+    const pollForResult = async () => {
+      while (!cancelled) {
+        const results = await checkGameResults(offering.sport);
+        const outcome = determinePickOutcome(offering, activePick.side, results);
+
+        if (outcome !== 'pending') {
+          if (!cancelled) {
+            resolvePick(outcome === 'won');
+          }
+          return;
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, 60000));
+      }
     };
-  }, [activePick, resolve]);
+
+    pollForResult();
+
+    return () => { cancelled = true; };
+  }, [activePick, resolvePick, offerings]);
 
   return (
     <div className="space-y-5">
-      {/* Dual stats bar */}
-      <div className="grid grid-cols-2 gap-3">
-        <div
-          className="rounded-xl border px-4 py-3"
-          style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
-        >
-          <StreakBadge value={weeklyStreak} label="Win Streak" icon={<FireFlameIcon size={36} />} pulse={weeklyStreak >= 3} />
-        </div>
-        <div
-          className="rounded-xl border px-4 py-3"
-          style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
-        >
-          <StreakBadge value={weeklyWins} label="Total Wins" icon={<StarIcon size={36} />} />
-        </div>
-      </div>
+      {/* Entry Card — stats + reward progress */}
+      <EntryCard />
 
-      {/* Week label */}
-      <div className="text-center">
-        <span className="text-[12px] leading-[14px] tracking-[0.02em] font-title" style={{ color: 'var(--color-theme-text-tertiary)' }}>
-          {weekInfo.label}
-        </span>
-      </div>
-
-      {/* Reward status strip */}
-      <RewardStatusStrip />
 
       {/* First-pick tooltip */}
       <PicksTooltip />
@@ -64,29 +64,37 @@ export default function HomePage() {
         <h2 className="text-[16px] leading-[24px] font-bold uppercase font-title" style={{ color: 'var(--color-theme-text-secondary)' }}>
           Today's Picks
         </h2>
-        <span className="text-xs" style={{ color: 'var(--color-theme-text-muted)' }}>{offerings.length} available</span>
+        <span className="text-xs" style={{ color: 'var(--color-theme-text-muted)' }}>{filteredOfferings.length} available</span>
       </div>
 
-      {/* Offering cards — first 6 (3 rows on sm) */}
-      <div className="grid gap-3 sm:grid-cols-2">
-        {offerings.slice(0, 6).map((offering, i) => (
-          <PickCard key={offering.id} offering={offering} index={i} />
-        ))}
-      </div>
+      {/* Sport filter chips */}
+      <SportFilterChips active={sportFilter} onChange={setSportFilter} availableLeagues={availableLeagues} />
 
-      {/* DraftKings ad */}
-      <img
-        src={draftkingsAd}
-        alt="DraftKings"
-        className="w-full rounded-xl"
-      />
+      {/* Loading state */}
+      {loading && offerings.length === 0 && (
+        <p className="text-center text-sm" style={{ color: 'var(--color-theme-text-muted)' }}>
+          Loading today's matchups...
+        </p>
+      )}
 
-      {/* Offering cards — remaining */}
-      {offerings.length > 6 && (
+      {/* Offering cards */}
+      {filteredOfferings.length > 0 ? (
         <div className="grid gap-3 sm:grid-cols-2">
-          {offerings.slice(6).map((offering, i) => (
-            <PickCard key={offering.id} offering={offering} index={i + 6} />
+          {filteredOfferings.map((offering, i) => (
+            <PickCard key={offering.id} offering={offering} index={i} />
           ))}
+        </div>
+      ) : (
+        <div
+          className="text-center py-10 rounded-xl border"
+          style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
+        >
+          <p className="text-[14px] leading-[20px] font-body" style={{ color: 'var(--color-theme-text-muted)' }}>
+            No picks available for this sport today.
+          </p>
+          <p className="text-[12px] leading-[16px] font-body mt-1" style={{ color: 'var(--color-theme-text-disabled)' }}>
+            Check back later or browse Top Events.
+          </p>
         </div>
       )}
 

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { offerings } from '../data/offerings';
-import { RESOLVE_DELAY_MS } from '../lib/resolution';
+import { getResolveDelay } from '../lib/resolution';
 
 export default function ActivePickBanner() {
   const activePick = useGameStore((s) => s.activePick);
@@ -27,6 +27,7 @@ export default function ActivePickBanner() {
 
   const offering = offerings.find((o) => o.id === (activePick ?? prevPickRef.current)?.offeringId);
   const pick = activePick ?? prevPickRef.current;
+  const resolveDelay = offering ? getResolveDelay(offering) : 5000;
 
   return (
     <div
@@ -65,7 +66,7 @@ export default function ActivePickBanner() {
               className="h-full rounded-r-full"
               style={{
                 background: 'linear-gradient(to right, #FFDA18, #796122)',
-                animation: `countdown-bar ${RESOLVE_DELAY_MS}ms linear forwards`,
+                animation: `countdown-bar ${resolveDelay}ms linear forwards`,
               }}
             />
           )}

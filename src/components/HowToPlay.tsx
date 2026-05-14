@@ -1,5 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
+import { useAuthStore } from '../store/authStore';
+import { doc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase/config';
 
+const USE_FIREBASE = import.meta.env.VITE_USE_FIREBASE === 'true';
 const SEEN_KEY = 'streak-htp-seen';
 
 const cards = [
@@ -67,12 +71,28 @@ function markSeen() {
 const TOOLTIP_KEY = SEEN_KEY + '-tooltip-dismissed';
 
 export function HowToPlayButton() {
-  const [open, setOpen] = useState(() => isFirstVisit());
+  const user = useAuthStore((s) => s.user);
+  const [open, setOpen] = useState(() => {
+    if (USE_FIREBASE) return false;
+    return isFirstVisit();
+  });
 
-  const handleClose = () => {
+  useEffect(() => {
+    if (USE_FIREBASE && user && user.hasSeenHowToPlay === false) {
+      setOpen(true);
+    }
+  }, [user]);
+
+  const handleClose = async () => {
     setOpen(false);
-    markSeen();
-    // Dispatch event so HomePage can show the tooltip
+
+    if (USE_FIREBASE && user) {
+      await updateDoc(doc(db, 'users', user.uid), { hasSeenHowToPlay: true });
+      useAuthStore.getState().setUser({ ...user, hasSeenHowToPlay: true });
+    } else {
+      markSeen();
+    }
+
     window.dispatchEvent(new CustomEvent('htp-closed'));
   };
 
@@ -82,7 +102,7 @@ export function HowToPlayButton() {
         onClick={() => setOpen(true)}
         aria-label="How to play"
         style={{
-          position: 'absolute',
+          position: 'fixed',
           bottom: 20,
           right: 20,
           width: 56,

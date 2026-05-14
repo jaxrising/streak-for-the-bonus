@@ -1,5 +1,13 @@
 import { useSyncExternalStore } from 'react';
 
+export type SportFilter = 'all' | string;
+
+interface SportFilterChipsProps {
+  active: SportFilter;
+  onChange: (filter: SportFilter) => void;
+  availableLeagues: string[];
+}
+
 const leagueLogos: Record<string, { light: string; dark: string }> = {
   NFL: {
     light: 'https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png',
@@ -69,10 +77,55 @@ function subscribeTheme(cb: () => void) {
   return () => observer.disconnect();
 }
 
-export default function SportIcon({ league, className = '' }: { league: string; className?: string }) {
+export default function SportFilterChips({ active, onChange, availableLeagues }: SportFilterChipsProps) {
   const theme = useSyncExternalStore(subscribeTheme, getTheme);
-  const logo = leagueLogos[league];
-  if (!logo) return null;
-  const src = theme === 'dark' ? logo.dark : logo.light;
-  return <img src={src} alt={league} className={`w-5 h-5 object-contain ${className}`} />;
+
+  return (
+    <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4">
+      {/* Top Events pill */}
+      <button
+        onClick={() => onChange('all')}
+        className="shrink-0 flex items-center gap-1.5 h-8 rounded-full px-3 transition-all text-[12px] leading-[14px] tracking-[0.02em] font-bold font-title uppercase whitespace-nowrap"
+        style={{
+          backgroundColor: active === 'all' ? 'var(--color-theme-text)' : 'transparent',
+          color: active === 'all' ? 'var(--color-theme-bg)' : 'var(--color-theme-text-secondary)',
+          border: active === 'all' ? '1px solid var(--color-theme-text)' : '1px solid var(--color-theme-border-hover)',
+        }}
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+        </svg>
+        Top Events
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="9 18 15 12 9 6" />
+        </svg>
+      </button>
+
+      {/* Vertical divider */}
+      <div className="shrink-0 w-px h-5" style={{ backgroundColor: 'var(--color-theme-border-hover)' }} />
+
+      {/* League chips */}
+      {availableLeagues.map((league) => {
+        const isActive = active === league;
+        const logo = leagueLogos[league];
+        const src = logo ? (theme === 'dark' ? logo.dark : logo.light) : undefined;
+
+        return (
+          <button
+            key={league}
+            onClick={() => onChange(league)}
+            className="shrink-0 flex items-center gap-1.5 h-8 rounded-full pl-1.5 pr-3 transition-all text-[12px] leading-[14px] tracking-[0.02em] font-bold font-title uppercase whitespace-nowrap"
+            style={{
+              backgroundColor: isActive ? 'var(--color-theme-text)' : 'transparent',
+              color: isActive ? 'var(--color-theme-bg)' : 'var(--color-theme-text-secondary)',
+              border: isActive ? '1px solid var(--color-theme-text)' : '1px solid var(--color-theme-border-hover)',
+            }}
+          >
+            {src && <img src={src} alt={league} className="w-6 h-6 rounded-full object-contain" />}
+            {league}
+          </button>
+        );
+      })}
+    </div>
+  );
 }
