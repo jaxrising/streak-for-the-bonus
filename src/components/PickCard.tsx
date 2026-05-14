@@ -28,9 +28,13 @@ function getSpreadTooltip(odds: string | undefined, teamName: string, sport: Spo
   const line = parseFloat(match[1]);
   const unit = UNIT_MAP[sport] || 'points';
   if (line < 0) {
-    return `${teamName} needs to win by ${Math.ceil(Math.abs(line))}+ ${unit}`;
+    const val = Math.ceil(Math.abs(line));
+    const u = val === 1 ? unit.replace(/s$/, '') : unit;
+    return `${teamName} needs to win by ${val}+ ${u}`;
   } else if (line > 0) {
-    return `${teamName} can lose by ${Math.floor(line)} ${unit} and still cover`;
+    const val = Math.floor(line);
+    const u = val === 1 ? unit.replace(/s$/, '') : unit;
+    return `${teamName} can lose by ${val} ${u} and still cover`;
   }
   return undefined;
 }
@@ -244,7 +248,11 @@ export default function PickCard({ offering, index }: PickCardProps) {
           style={{
             right: 24,
             top: hoveredSide === 'A' ? 52 : 110,
-            transform: 'translateY(-100%)',
+            transform: 'translateY(-100%) translateX(25%)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: 'fit-content',
           }}
         >
           <div
@@ -268,7 +276,6 @@ export default function PickCard({ offering, index }: PickCardProps) {
               borderLeft: '6px solid transparent',
               borderRight: '6px solid transparent',
               borderTop: '6px solid #FF9151',
-              margin: '0 auto',
             }}
           />
         </div>
