@@ -1,6 +1,9 @@
 import { create } from 'zustand';
+import { doc, getDoc } from 'firebase/firestore';
 import { onAuthChange } from '../firebase/auth';
 import { getOrCreateUser, type UserProfile } from '../firebase/collections';
+import { db } from '../firebase/config';
+import { useGameStore } from './gameStore';
 
 export interface AuthUser {
   uid: string;
@@ -56,6 +59,27 @@ export function initAuth() {
           loading: false,
           initialized: true,
         });
+
+        // Restore today's active pick
+        try {
+          const pickSnap = await getDoc(doc(db, 'users', firebaseUser.uid, 'activePick', 'current'));
+          if (pickSnap.exists()) {
+            const data = pickSnap.data();
+            const today = new Date().toISOString().split('T')[0];
+            if (data.date === today) {
+              useGameStore.setState({
+                submitted: true,
+                submittedPick: {
+                  offeringId: data.offeringId,
+                  side: data.side,
+                  chosenOption: data.chosenOption,
+                },
+              });
+            }
+          }
+        } catch {
+          // Non-critical — pick just won't persist
+        }
       } catch {
         useAuthStore.setState({
           user: {

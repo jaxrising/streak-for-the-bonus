@@ -105,6 +105,18 @@ export const useGameStore = create<GameState>((set, get) => ({
       import('../firebase/collections').then(({ recordPick }) => {
         recordPick(state.uid!, offeringId, side, chosenOption, odds);
       });
+      const today = new Date().toISOString().split('T')[0];
+      import('firebase/firestore').then(({ doc, setDoc }) => {
+        import('../firebase/config').then(({ db }) => {
+          setDoc(doc(db, 'users', state.uid!, 'activePick', 'current'), {
+            offeringId,
+            side,
+            chosenOption,
+            startedAt: Date.now(),
+            date: today,
+          });
+        });
+      });
     }
   },
 
