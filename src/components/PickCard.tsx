@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Offering, PickSide, Sport } from '../types';
 import { useGameStore } from '../store/gameStore';
 import SportIcon from './SportIcon';
@@ -45,7 +46,7 @@ function PickButton({
   isHeadshot,
   isSelected,
   isDisabled,
-  tooltipText,
+  onHoverOdds,
   onClick,
 }: {
   label: string;
@@ -58,7 +59,7 @@ function PickButton({
   isHeadshot: boolean;
   isSelected: boolean;
   isDisabled: boolean;
-  tooltipText?: string;
+  onHoverOdds: (hovering: boolean) => void;
   onClick: () => void;
 }) {
   const muted = isDisabled && !isSelected;
@@ -134,7 +135,11 @@ function PickButton({
 
       {/* Stats area — right-aligned */}
       {(pickPct != null || odds) && (
-        <div className="relative z-10 group/stats flex flex-col items-end shrink-0 pr-6 pl-2 gap-1">
+        <div
+          className="relative z-10 flex flex-col items-end shrink-0 pr-6 pl-2 gap-1"
+          onMouseEnter={() => onHoverOdds(true)}
+          onMouseLeave={() => onHoverOdds(false)}
+        >
           {pickPct != null && (
             <span
               className="text-[10px] leading-[14px] font-body font-normal tabular-nums"
@@ -153,35 +158,6 @@ function PickButton({
               </span>
             </div>
           )}
-          {tooltipText && (
-            <div className="absolute bottom-full right-0 mb-2 hidden group-hover/stats:block z-50">
-              <div
-                style={{
-                  backgroundColor: '#FF9151',
-                  borderRadius: 10,
-                  padding: '8px 12px',
-                  fontSize: 13,
-                  fontWeight: 500,
-                  color: '#000000',
-                  whiteSpace: 'nowrap',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                }}
-              >
-                {tooltipText}
-              </div>
-              <div
-                style={{
-                  width: 0,
-                  height: 0,
-                  borderLeft: '6px solid transparent',
-                  borderRight: '6px solid transparent',
-                  borderTop: '6px solid #FF9151',
-                  marginLeft: 'auto',
-                  marginRight: 12,
-                }}
-              />
-            </div>
-          )}
         </div>
       )}
     </button>
@@ -196,15 +172,20 @@ export default function PickCard({ offering, index }: PickCardProps) {
   const isLocked = offering.startTimeISO ? new Date(offering.startTimeISO) <= new Date() : false;
   const isDisabled = submitted || isLocked;
   const isHeadshot = HEADSHOT_SPORTS.has(offering.sport);
+  const [hoveredSide, setHoveredSide] = useState<'A' | 'B' | null>(null);
 
   const handlePick = (side: PickSide) => {
     if (isDisabled) return;
     selectPick(offering, side);
   };
 
+  const tooltipTextA = getSpreadTooltip(offering.oddsA, offering.shortA || offering.optionA, offering.sport);
+  const tooltipTextB = getSpreadTooltip(offering.oddsB, offering.shortB || offering.optionB, offering.sport);
+  const activeTooltip = hoveredSide === 'A' ? tooltipTextA : hoveredSide === 'B' ? tooltipTextB : null;
+
   return (
     <div
-      className={`pick-card-container border rounded-xl p-4 transition-all duration-300 animate-fade-in-up ${
+      className={`pick-card-container relative border rounded-xl p-4 transition-all duration-300 animate-fade-in-up ${
         isSelected
           ? 'shadow-[0_0_20px_rgba(255,255,255,0.15)]'
           : isDisabled && !isSelected
@@ -225,7 +206,6 @@ export default function PickCard({ offering, index }: PickCardProps) {
         </span>
       </div>
 
-
       <div className="grid grid-cols-1 gap-2">
         <PickButton
           label={offering.optionA}
@@ -238,7 +218,7 @@ export default function PickCard({ offering, index }: PickCardProps) {
           isHeadshot={isHeadshot}
           isSelected={isSelected && selectedSide === 'A'}
           isDisabled={isDisabled}
-          tooltipText={getSpreadTooltip(offering.oddsA, offering.shortA || offering.optionA, offering.sport)}
+          onHoverOdds={(h) => setHoveredSide(h ? 'A' : null)}
           onClick={() => handlePick('A')}
         />
         <PickButton
@@ -252,10 +232,47 @@ export default function PickCard({ offering, index }: PickCardProps) {
           isHeadshot={isHeadshot}
           isSelected={isSelected && selectedSide === 'B'}
           isDisabled={isDisabled}
-          tooltipText={getSpreadTooltip(offering.oddsB, offering.shortB || offering.optionB, offering.sport)}
+          onHoverOdds={(h) => setHoveredSide(h ? 'B' : null)}
           onClick={() => handlePick('B')}
         />
       </div>
+
+      {/* Tooltip — rendered at card level to avoid overflow clipping */}
+      {activeTooltip && (
+        <div
+          className="absolute z-50 pointer-events-none"
+          style={{
+            right: 24,
+            top: hoveredSide === 'A' ? 52 : 110,
+            transform: 'translateY(-100%)',
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#FF9151',
+              borderRadius: 10,
+              padding: '8px 12px',
+              fontSize: 13,
+              fontWeight: 500,
+              color: '#000000',
+              whiteSpace: 'nowrap',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+            }}
+          >
+            {activeTooltip}
+          </div>
+          <div
+            style={{
+              width: 0,
+              height: 0,
+              borderLeft: '6px solid transparent',
+              borderRight: '6px solid transparent',
+              borderTop: '6px solid #FF9151',
+              margin: '0 auto',
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }
