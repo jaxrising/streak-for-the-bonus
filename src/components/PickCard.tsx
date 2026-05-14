@@ -93,27 +93,11 @@ function PickButton({
           style={{ width: pickPct != null ? `${pickPct}%` : '112px' }}
         >
           <div
-            className="absolute left-0 top-0 bottom-0 w-full"
+            className="absolute inset-0"
             style={{
-              maskImage: 'linear-gradient(to right, black 60%, transparent 100%)',
-              WebkitMaskImage: 'linear-gradient(to right, black 60%, transparent 100%)',
+              background: `linear-gradient(to right, ${color}80 0%, ${color}30 40%, transparent 100%)`,
             }}
-          >
-            <div
-              className="absolute inset-0"
-              style={{
-                background: `radial-gradient(ellipse at 0% 50%, ${color} 0%, transparent 70%)`,
-                opacity: 0.5,
-              }}
-            />
-            <div
-              className="absolute inset-0"
-              style={{
-                background: `linear-gradient(to right, ${color}40 0%, transparent 100%)`,
-                opacity: 0.4,
-              }}
-            />
-          </div>
+          />
         </div>
       )}
 
@@ -130,12 +114,9 @@ function PickButton({
           className="absolute left-0 top-0 h-full w-[80px] object-cover object-top z-10"
         />
       )}
-      {!color && image && !isHeadshot && (
-        <div className="w-[80px] shrink-0" />
-      )}
 
       {/* Team name — three variants toggled by container queries */}
-      <span className="relative z-10 flex-1 text-left pl-[88px] min-w-0" style={{ color: textColor }}>
+      <span className="relative z-10 flex-1 text-left pl-[80px] min-w-0" style={{ color: textColor }}>
         <span className="team-name-full block truncate">{label}</span>
         <span className="team-name-short block truncate">{shortLabel || label}</span>
         <span className={`team-name-abbr block ${isHeadshot ? 'truncate' : 'whitespace-nowrap'}`}>{abbrLabel || (shortLabel || label)}</span>
@@ -144,7 +125,7 @@ function PickButton({
       {/* Stats area — right-aligned */}
       {(pickPct != null || odds) && (
         <div
-          className="relative z-10 flex flex-col items-end shrink-0 pr-6 pl-2 gap-1"
+          className="relative z-10 flex flex-col items-end shrink-0 pr-[24px] pl-2 gap-[4px]"
           style={{ overflow: 'visible' }}
           onMouseEnter={() => onHoverOdds(true)}
           onMouseLeave={() => onHoverOdds(false)}
@@ -192,7 +173,7 @@ function PickButton({
 
           {pickPct != null && (
             <span
-              className="text-[10px] leading-[14px] font-body font-normal tabular-nums"
+              className="text-[10px] leading-[12px] font-body font-normal tabular-nums"
               style={{ color: textColor }}
             >
               {pickPct}% picked
