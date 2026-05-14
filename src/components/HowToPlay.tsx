@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useAuthStore } from '../store/authStore';
+import { useGameStore } from '../store/gameStore';
 import { doc, updateDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
@@ -130,6 +131,7 @@ export function HowToPlayButton() {
 
 export function PicksTooltip() {
   const [visible, setVisible] = useState(false);
+  const pendingSelection = useGameStore((s) => s.pendingSelection);
 
   useEffect(() => {
     const show = () => {
@@ -141,6 +143,13 @@ export function PicksTooltip() {
     window.addEventListener('htp-closed', show);
     return () => window.removeEventListener('htp-closed', show);
   }, []);
+
+  useEffect(() => {
+    if (pendingSelection && visible) {
+      setVisible(false);
+      try { localStorage.setItem(TOOLTIP_KEY, '1'); } catch {}
+    }
+  }, [pendingSelection, visible]);
 
   if (!visible) return null;
 
