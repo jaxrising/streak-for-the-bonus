@@ -103,7 +103,7 @@ export function HowToPlayButton() {
         aria-label="How to play"
         style={{
           position: 'fixed',
-          bottom: 20,
+          bottom: 90,
           right: 20,
           width: 56,
           height: 56,
