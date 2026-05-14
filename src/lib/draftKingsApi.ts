@@ -92,7 +92,7 @@ function mapESPNToOffering(event: ESPNEvent, sport: Sport, league: string): Offe
     id: `espn-${event.id}`,
     sport,
     league,
-    question: `Who covers the spread? ${away.team.shortDisplayName} @ ${home.team.shortDisplayName}`,
+    question: 'Pick against the spread!',
     optionA: away.team.displayName,
     optionB: home.team.displayName,
     shortA: away.team.shortDisplayName,
