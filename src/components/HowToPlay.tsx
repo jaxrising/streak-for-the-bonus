@@ -33,8 +33,8 @@ const cards = [
     icon: '🎁',
   },
   {
-    headline: 'Compete Solo or in Groups',
-    body: 'Create or join a group, climb the leaderboard, and talk trash. Daily, weekly, and all-time rankings keep it competitive.',
+    headline: 'Climb the Leaderboard',
+    body: 'Compete against other players for the top spot. Daily, weekly, and all-time rankings keep it competitive.',
     icon: '👥',
   },
   {

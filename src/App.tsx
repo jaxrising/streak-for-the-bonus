@@ -5,7 +5,6 @@ import HomePage from './pages/HomePage';
 import LeaderboardPage from './pages/LeaderboardPage';
 import RewardsPage from './pages/RewardsPage';
 import ProfilePage from './pages/ProfilePage';
-import GroupsPage from './pages/GroupsPage';
 import LoginScreen from './components/LoginScreen';
 import { useAuthStore, initAuth } from './store/authStore';
 import { useGameStore } from './store/gameStore';
@@ -66,7 +65,6 @@ export default function App() {
           <Route path="/leaderboard" element={<LeaderboardPage />} />
           <Route path="/rewards" element={<RewardsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/groups" element={<GroupsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

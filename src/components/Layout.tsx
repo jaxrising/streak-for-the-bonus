@@ -6,7 +6,6 @@ import { PersonIcon } from './icons';
 
 const tabs = [
   { to: '/', label: 'HOME' },
-  { to: '/groups', label: 'GROUPS' },
   { to: '/leaderboard', label: 'LEADERS' },
   { to: '/rewards', label: 'REWARDS' },
 ];
