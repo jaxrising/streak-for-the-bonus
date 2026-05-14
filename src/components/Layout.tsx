@@ -15,6 +15,7 @@ const videoSrc = new URL('../assets/Streak_video.mp4', import.meta.url).href;
 const logoSrc = new URL('../assets/Streak Logo.png', import.meta.url).href;
 const logoSmallSrc = new URL('../assets/Streak Small Logo.png', import.meta.url).href;
 const adSrc = new URL('../assets/Streak_ad.jpeg', import.meta.url).href;
+const espnLogoSrc = new URL('../assets/AppBar/ESPN.png', import.meta.url).href;
 
 const globalNavSports = ['NFL', 'Soccer', 'NBA', 'MLB', 'NCAAF', 'NCAAM'];
 
@@ -43,7 +44,7 @@ export default function Layout() {
         {/* ESPN Global Nav */}
         <div className="w-full h-[44px] flex items-center justify-between px-4 relative" style={{ backgroundColor: '#101113' }}>
           <div className="flex items-center gap-6">
-            <span className="font-display text-[18px] font-black italic text-[#FF0000] tracking-tight">ESPN</span>
+            <img src={espnLogoSrc} alt="ESPN" className="h-[20px] object-contain" />
             <nav className="hidden md:flex items-center gap-6">
               {globalNavSports.map(sport => (
                 <a key={sport} href="#" className="text-[14px] font-body text-white hover:text-white/80 transition-colors whitespace-nowrap">
