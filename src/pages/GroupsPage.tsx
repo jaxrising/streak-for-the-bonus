@@ -54,7 +54,7 @@ export default function GroupsPage() {
             <option value="allTime">All-Time</option>
           </select>
         </div>
-        <LeaderboardTable users={groupUsers} sortBy={timeFrame} />
+        <LeaderboardTable users={groupUsers} timeFrame={timeFrame} category="streak" />
       </div>
 
       {/* Create / Join group CTA */}

@@ -25,7 +25,7 @@ export default function PickHistoryList() {
             borderColor: 'var(--color-theme-border)',
           }}
         >
-          <SportIcon sport={pick.sport} />
+          <SportIcon league={pick.league || pick.sport} />
           <div className="flex-1 min-w-0">
             <div className="text-sm truncate" style={{ color: 'var(--color-theme-text-secondary)' }}>{pick.question}</div>
             <div className="text-xs" style={{ color: 'var(--color-theme-text-muted)' }}>{pick.chosenOption}</div>

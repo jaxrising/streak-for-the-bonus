@@ -41,6 +41,7 @@ export interface PickRecord {
   offeringId: string;
   question: string;
   sport: Sport;
+  league?: string;
   chosenOption: string;
   side: PickSide;
   status: PickStatus;
