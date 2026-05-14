@@ -1,4 +1,4 @@
-import type { Offering, PickSide } from '../types';
+import type { Offering, PickSide, Sport } from '../types';
 import { useGameStore } from '../store/gameStore';
 import SportIcon from './SportIcon';
 
@@ -8,6 +8,31 @@ interface PickCardProps {
 }
 
 const HEADSHOT_SPORTS = new Set(['Golf']);
+
+const UNIT_MAP: Record<Sport, string> = {
+  MLB: 'runs',
+  NBA: 'points',
+  NFL: 'points',
+  NHL: 'goals',
+  Soccer: 'goals',
+  WNBA: 'points',
+  Golf: 'strokes',
+  WWE: 'points',
+};
+
+function getSpreadTooltip(odds: string | undefined, teamName: string, sport: Sport): string | undefined {
+  if (!odds) return undefined;
+  const match = odds.match(/^([+-]?\d+\.?\d*)/);
+  if (!match) return undefined;
+  const line = parseFloat(match[1]);
+  const unit = UNIT_MAP[sport] || 'points';
+  if (line < 0) {
+    return `${teamName} needs to win by ${Math.ceil(Math.abs(line))}+ ${unit}`;
+  } else if (line > 0) {
+    return `${teamName} can lose by ${Math.floor(line)} ${unit} and still cover`;
+  }
+  return undefined;
+}
 
 function PickButton({
   label,
@@ -20,6 +45,7 @@ function PickButton({
   isHeadshot,
   isSelected,
   isDisabled,
+  tooltipText,
   onClick,
 }: {
   label: string;
@@ -32,6 +58,7 @@ function PickButton({
   isHeadshot: boolean;
   isSelected: boolean;
   isDisabled: boolean;
+  tooltipText?: string;
   onClick: () => void;
 }) {
   const muted = isDisabled && !isSelected;
@@ -107,7 +134,7 @@ function PickButton({
 
       {/* Stats area — right-aligned */}
       {(pickPct != null || odds) && (
-        <div className="relative z-10 flex flex-col items-end shrink-0 pr-6 pl-2 gap-1">
+        <div className="relative z-10 group/stats flex flex-col items-end shrink-0 pr-6 pl-2 gap-1">
           {pickPct != null && (
             <span
               className="text-[10px] leading-[14px] font-body font-normal tabular-nums"
@@ -124,6 +151,35 @@ function PickButton({
               >
                 {odds}
               </span>
+            </div>
+          )}
+          {tooltipText && (
+            <div className="absolute bottom-full right-0 mb-2 hidden group-hover/stats:block z-50">
+              <div
+                style={{
+                  backgroundColor: '#FF9151',
+                  borderRadius: 10,
+                  padding: '8px 12px',
+                  fontSize: 13,
+                  fontWeight: 500,
+                  color: '#000000',
+                  whiteSpace: 'nowrap',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                }}
+              >
+                {tooltipText}
+              </div>
+              <div
+                style={{
+                  width: 0,
+                  height: 0,
+                  borderLeft: '6px solid transparent',
+                  borderRight: '6px solid transparent',
+                  borderTop: '6px solid #FF9151',
+                  marginLeft: 'auto',
+                  marginRight: 12,
+                }}
+              />
             </div>
           )}
         </div>
@@ -182,6 +238,7 @@ export default function PickCard({ offering, index }: PickCardProps) {
           isHeadshot={isHeadshot}
           isSelected={isSelected && selectedSide === 'A'}
           isDisabled={isDisabled}
+          tooltipText={getSpreadTooltip(offering.oddsA, offering.shortA || offering.optionA, offering.sport)}
           onClick={() => handlePick('A')}
         />
         <PickButton
@@ -195,6 +252,7 @@ export default function PickCard({ offering, index }: PickCardProps) {
           isHeadshot={isHeadshot}
           isSelected={isSelected && selectedSide === 'B'}
           isDisabled={isDisabled}
+          tooltipText={getSpreadTooltip(offering.oddsB, offering.shortB || offering.optionB, offering.sport)}
           onClick={() => handlePick('B')}
         />
       </div>
