@@ -55,7 +55,7 @@ function formatStartTime(isoDate: string): string {
   const ampm = hours >= 12 ? 'PM' : 'AM';
   const h = hours % 12 || 12;
   const m = minutes.toString().padStart(2, '0');
-  return `${h}:${m} ${ampm} ET`;
+  return `Lock @ ${h}:${m} ${ampm} ET`;
 }
 
 function toDarkLogo(url: string): string {
@@ -108,6 +108,7 @@ function mapESPNToOffering(event: ESPNEvent, sport: Sport, league: string): Offe
     pickPctA,
     pickPctB: 100 - pickPctA,
     startTime: formatStartTime(comp.startDate),
+    startTimeISO: comp.startDate,
   };
 }
 

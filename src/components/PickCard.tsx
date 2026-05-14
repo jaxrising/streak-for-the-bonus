@@ -137,7 +137,8 @@ export default function PickCard({ offering, index }: PickCardProps) {
   const activeSelection = submitted ? submittedPick : pendingSelection;
   const isSelected = activeSelection?.offeringId === offering.id;
   const selectedSide = activeSelection?.side;
-  const isDisabled = submitted;
+  const isLocked = offering.startTimeISO ? new Date(offering.startTimeISO) <= new Date() : false;
+  const isDisabled = submitted || isLocked;
   const isHeadshot = HEADSHOT_SPORTS.has(offering.sport);
 
   const handlePick = (side: PickSide) => {
@@ -163,10 +164,11 @@ export default function PickCard({ offering, index }: PickCardProps) {
       <div className="flex items-center gap-2 mb-3">
         <SportIcon league={offering.league} />
         <span className="text-[12px] leading-[14px] tracking-[0.02em] font-medium uppercase font-title" style={{ color: 'var(--color-theme-text-tertiary)' }}>{offering.league}</span>
-        <span className="ml-auto text-xs" style={{ color: 'var(--color-theme-text-muted)' }}>{offering.startTime}</span>
+        <span className="ml-auto text-xs" style={{ color: isLocked ? '#ff3232' : 'var(--color-theme-text-muted)' }}>
+          {isLocked ? 'Locked' : offering.startTime}
+        </span>
       </div>
 
-      <p className="text-[14px] leading-[20px] font-medium mb-4 line-clamp-2" style={{ color: 'var(--color-theme-text-secondary)' }}>{offering.question}</p>
 
       <div className="grid grid-cols-1 gap-2">
         <PickButton

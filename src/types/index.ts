@@ -22,6 +22,7 @@ export interface Offering {
   pickPctA?: number;
   pickPctB?: number;
   startTime: string;
+  startTimeISO?: string;
   confidence?: number;
 }
 
