@@ -248,18 +248,26 @@ export default function PickCard({ offering, index }: PickCardProps) {
           className="absolute pointer-events-none"
           style={{
             zIndex: 9999,
+            top: hoveredSide === 'A' ? 36 : 94,
             right: 0,
+            display: 'flex',
+            justifyContent: 'flex-end',
             paddingRight: 24,
-            top: hoveredSide === 'A' ? 52 : 110,
-            transform: 'translateY(-100%)',
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              transform: 'translateY(-100%)',
+            }}
+          >
             <div
               style={{
                 backgroundColor: '#FF9151',
-                borderRadius: 10,
-                padding: '8px 12px',
+                borderRadius: 4,
+                padding: '6px 12px',
                 fontSize: 13,
                 fontWeight: 500,
                 color: '#000000',
@@ -273,9 +281,9 @@ export default function PickCard({ offering, index }: PickCardProps) {
               style={{
                 width: 0,
                 height: 0,
-                borderLeft: '6px solid transparent',
-                borderRight: '6px solid transparent',
-                borderTop: '6px solid #FF9151',
+                borderLeft: '7px solid transparent',
+                borderRight: '7px solid transparent',
+                borderTop: '8px solid #FF9151',
               }}
             />
           </div>
