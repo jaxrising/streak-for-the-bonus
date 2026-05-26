@@ -20,8 +20,7 @@ const cards = [
   },
   {
     headline: 'Two Ways to Win Big',
-    body: 'Longest Streak—The top weekly streak wins $10,000 in DK Bonus Bets.
-Most Wins—The most correct picks in a week also wins $10,000.',
+    body: 'Longest Streak—The top weekly streak wins $10,000 in DK Bonus Bets.\nMost Wins—The most correct picks in a week also wins $10,000.',
     icon: '🏆',
   },
   {
