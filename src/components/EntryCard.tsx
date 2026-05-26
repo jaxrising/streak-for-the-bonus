@@ -20,7 +20,7 @@ function getFireState(streak: number): 'idle' | 'warm' | 'hot' | 'blazing' | 'in
 
 interface ProgressPipsProps {
   current: number;
-  next: { threshold: number; tier: { prize: string } } | null;
+  next: { tier: { threshold: number; prize: string }; gap: number; gapText: string } | null;
   color: string;
 }
 
@@ -36,7 +36,8 @@ function ProgressPips({ current, next, color }: ProgressPipsProps) {
     );
   }
 
-  const { threshold, tier } = next;
+  const { tier } = next;
+  const threshold = tier.threshold;
   const pips = Array.from({ length: threshold }, (_, i) => i + 1);
   const pipSize = threshold > 6 ? 7 : 9;
 

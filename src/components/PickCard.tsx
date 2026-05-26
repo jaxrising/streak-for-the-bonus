@@ -1,4 +1,4 @@
-import type { Offering, PickSide, Sport } from '../types';
+import type { Offering, PickSide } from '../types';
 import { useGameStore } from '../store/gameStore';
 import SportIcon from './SportIcon';
 
@@ -9,32 +9,16 @@ interface PickCardProps {
 
 const HEADSHOT_SPORTS = new Set(['Golf']);
 
-const UNIT_MAP: Record<Sport, string> = {
-  MLB: 'runs',
-  NBA: 'points',
-  NFL: 'points',
-  NHL: 'goals',
-  Soccer: 'goals',
-  WNBA: 'points',
-  Golf: 'strokes',
-  WWE: 'points',
-};
-
-
 function PickButton({
   label,
   shortLabel,
   abbrLabel,
-  odds,
   pickPct,
   image,
   color,
   isHeadshot,
   isSelected,
   isDisabled,
-  isHovered,
-  tooltipText,
-  onHoverOdds,
   onClick,
 }: {
   label: string;
@@ -46,12 +30,10 @@ function PickButton({
   isHeadshot: boolean;
   isSelected: boolean;
   isDisabled: boolean;
-  isHovered: boolean;
   onClick: () => void;
 }) {
   const muted = isDisabled && !isSelected;
   const textColor = muted ? '#6C6D6F' : '#FFFFFF';
-  const subTextColor = muted ? '#6C6D6F' : '#a1a2a3';
 
   return (
     <button
@@ -177,7 +159,7 @@ export default function PickCard({ offering, index }: PickCardProps) {
           isHeadshot={isHeadshot}
           isSelected={isSelected && selectedSide === 'A'}
           isDisabled={isDisabled}
-          isHovered={false}
+
           onClick={() => handlePick('A')}
         />
         <PickButton
@@ -190,7 +172,7 @@ export default function PickCard({ offering, index }: PickCardProps) {
           isHeadshot={isHeadshot}
           isSelected={isSelected && selectedSide === 'B'}
           isDisabled={isDisabled}
-          isHovered={false}
+
           onClick={() => handlePick('B')}
         />
       </div>
