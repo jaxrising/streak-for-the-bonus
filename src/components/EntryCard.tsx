@@ -1,10 +1,9 @@
 import { useGameStore } from '../store/gameStore';
 import { getNextReward } from '../data/rewards';
-import { leaderboardUsers } from '../data/leaderboard';
 
-function DKCrownLogo({ className }: { className?: string }) {
+function DKCrownLogo({ size = 14 }: { size?: number }) {
   return (
-    <svg className={className} width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
       <path d="M12 2L9.5 8.5L3 7L6 13L3 21H21L18 13L21 7L14.5 8.5L12 2Z" />
       <circle cx="12" cy="15" r="2.5" fill="currentColor" opacity="0.3" />
     </svg>
@@ -19,28 +18,66 @@ function getFireState(streak: number): 'idle' | 'warm' | 'hot' | 'blazing' | 'in
   return 'idle';
 }
 
+interface ProgressPipsProps {
+  current: number;
+  next: { threshold: number; tier: { prize: string } } | null;
+  color: string;
+}
+
+function ProgressPips({ current, next, color }: ProgressPipsProps) {
+  if (!next) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        <DKCrownLogo size={12} />
+        <span style={{ fontSize: 11, fontFamily: 'var(--font-body)', fontWeight: 600, color: 'var(--color-earned)' }}>
+          All milestones unlocked!
+        </span>
+      </div>
+    );
+  }
+
+  const { threshold, tier } = next;
+  const pips = Array.from({ length: threshold }, (_, i) => i + 1);
+  const pipSize = threshold > 6 ? 7 : 9;
+
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 3, flexWrap: 'nowrap', overflow: 'hidden' }}>
+      {pips.map((pip) => {
+        const filled = pip <= current;
+        return (
+          <div
+            key={pip}
+            style={{
+              width: pipSize,
+              height: pipSize,
+              borderRadius: '50%',
+              backgroundColor: filled ? color : 'transparent',
+              border: `1.5px solid ${filled ? color : 'var(--color-theme-border-hover)'}`,
+              transition: 'all 0.25s ease',
+              flexShrink: 0,
+            }}
+          />
+        );
+      })}
+      <div style={{ width: 1, height: 14, backgroundColor: 'var(--color-theme-border)', margin: '0 3px', flexShrink: 0 }} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }} className="entry-card__dk-logo">
+        <DKCrownLogo size={12} />
+        <span style={{ fontSize: 11, fontFamily: 'var(--font-body)', fontWeight: 600, color: 'var(--color-theme-text-secondary)', whiteSpace: 'nowrap' }}>
+          {tier.prize}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function EntryCard() {
   const weeklyWins = useGameStore((s) => s.weeklyWins);
   const weeklyStreak = useGameStore((s) => s.weeklyStreak);
-  const allTimeWins = useGameStore((s) => s.allTimeWins);
-
-  const currentUser = leaderboardUsers.find((u) => u.isCurrentUser);
-  const totalPicks = currentUser?.weeklyPicks ?? (weeklyWins + 2);
-  const winPct = totalPicks > 0 ? Math.round((weeklyWins / totalPicks) * 100) : 0;
-
-  const rank = currentUser?.rank ?? 5;
+  const longestWeeklyStreak = useGameStore((s) => s.longestWeeklyStreak);
 
   const streakNext = getNextReward(weeklyWins, weeklyStreak, 'streak');
   const winsNext = getNextReward(weeklyWins, weeklyStreak, 'wins');
-
   const fireState = getFireState(weeklyStreak);
-
-  const stats = [
-    { value: `#${rank}`, label: 'Rank' },
-    { value: `${winPct}%`, label: 'PCT' },
-    { value: String(weeklyStreak), label: 'Streak' },
-    { value: String(allTimeWins), label: 'Wins' },
-  ];
 
   return (
     <div
@@ -64,62 +101,57 @@ export default function EntryCard() {
       )}
 
       <div className="relative z-10 px-4 py-3">
-        {/* Stats row */}
-        <div className="flex items-center">
-          {stats.map((stat, i) => (
-            <div key={stat.label} className="flex items-center flex-1">
-              {i > 0 && (
-                <div className="w-px h-7 mr-auto" style={{ backgroundColor: 'var(--color-theme-border)' }} />
+        <div className="flex gap-4">
+
+          {/* ── STREAK section ── */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              className="text-[10px] leading-[12px] tracking-[0.08em] uppercase font-title font-bold mb-2"
+              style={{ color: 'var(--color-theme-text-tertiary)' }}
+            >
+              Streak
+            </div>
+            <div className="flex items-baseline gap-2 mb-2">
+              <span
+                className="text-[32px] leading-[36px] font-black font-display tabular-nums"
+                style={{ color: 'var(--color-streak)' }}
+              >
+                {weeklyStreak}
+              </span>
+              {longestWeeklyStreak > 0 && (
+                <span className="text-[11px] font-body" style={{ color: 'var(--color-theme-text-muted)' }}>
+                  Best: {longestWeeklyStreak}
+                </span>
               )}
-              <div className={`text-center ${i > 0 ? 'flex-1' : 'flex-1'}`}>
-                <div className="text-[20px] leading-[24px] font-bold font-title tabular-nums" style={{ color: 'var(--color-theme-text)' }}>
-                  {stat.value}
-                </div>
-                <div className="text-[10px] leading-[12px] tracking-[0.08em] uppercase font-title mt-0.5" style={{ color: 'var(--color-theme-text-tertiary)' }}>
-                  {stat.label}
-                </div>
-              </div>
             </div>
-          ))}
-        </div>
+            <ProgressPips current={weeklyStreak} next={streakNext} color="var(--color-streak)" />
+          </div>
 
-        {/* Divider */}
-        <div className="h-px my-3" style={{ backgroundColor: 'var(--color-theme-border)' }} />
+          {/* Vertical divider */}
+          <div className="w-px self-stretch" style={{ backgroundColor: 'var(--color-theme-border)' }} />
 
-        {/* Reward progress lines */}
-        <div className="space-y-1.5">
-          {streakNext ? (
-            <div className="flex items-center gap-2 text-[12px] leading-[16px] font-body">
-              <DKCrownLogo className="shrink-0 entry-card__dk-logo" />
-              <span style={{ color: 'var(--color-theme-text-secondary)' }}>
-                <span className="font-medium" style={{ color: 'var(--color-theme-text)' }}>Streak:</span>{' '}
-                {streakNext.gapText} for {streakNext.tier.prize}
+          {/* ── MOST WINS section ── */}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              className="text-[10px] leading-[12px] tracking-[0.08em] uppercase font-title font-bold mb-2"
+              style={{ color: 'var(--color-theme-text-tertiary)' }}
+            >
+              Most Wins
+            </div>
+            <div className="flex items-baseline gap-2 mb-2">
+              <span
+                className="text-[32px] leading-[36px] font-black font-display tabular-nums"
+                style={{ color: 'var(--color-wins)' }}
+              >
+                {weeklyWins}
+              </span>
+              <span className="text-[11px] font-body" style={{ color: 'var(--color-theme-text-muted)' }}>
+                this week
               </span>
             </div>
-          ) : (
-            <div className="flex items-center gap-2 text-[12px] leading-[16px] font-body">
-              <DKCrownLogo className="shrink-0 entry-card__dk-logo" />
-              <span style={{ color: 'var(--color-earned)' }}>
-                <span className="font-medium">Streak:</span> All milestones unlocked!
-              </span>
-            </div>
-          )}
-          {winsNext ? (
-            <div className="flex items-center gap-2 text-[12px] leading-[16px] font-body">
-              <DKCrownLogo className="shrink-0 entry-card__dk-logo" />
-              <span style={{ color: 'var(--color-theme-text-secondary)' }}>
-                <span className="font-medium" style={{ color: 'var(--color-theme-text)' }}>Wins:</span>{' '}
-                {winsNext.gapText} for {winsNext.tier.prize}
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2 text-[12px] leading-[16px] font-body">
-              <DKCrownLogo className="shrink-0 entry-card__dk-logo" />
-              <span style={{ color: 'var(--color-earned)' }}>
-                <span className="font-medium">Wins:</span> All milestones unlocked!
-              </span>
-            </div>
-          )}
+            <ProgressPips current={weeklyWins} next={winsNext} color="var(--color-wins)" />
+          </div>
+
         </div>
       </div>
     </div>

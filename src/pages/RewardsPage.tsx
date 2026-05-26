@@ -5,7 +5,45 @@ import { getWeekEndCountdown, formatCountdown } from '../lib/weekUtils';
 import RewardProgressBar from '../components/RewardProgressBar';
 import RewardTierCard from '../components/RewardTierCard';
 import AccountLinkCard from '../components/AccountLinkCard';
-import { Icon } from '../components/icons';
+
+function DKCrownLogo({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2L9.5 8.5L3 7L6 13L3 21H21L18 13L21 7L14.5 8.5L12 2Z" />
+      <circle cx="12" cy="15" r="2.5" fill="currentColor" opacity="0.3" />
+    </svg>
+  );
+}
+
+interface MiniPipsProps {
+  current: number;
+  threshold: number;
+  color: string;
+}
+
+function MiniPips({ current, threshold, color }: MiniPipsProps) {
+  const pips = Array.from({ length: threshold }, (_, i) => i + 1);
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+      {pips.map((pip) => {
+        const filled = pip <= current;
+        return (
+          <div
+            key={pip}
+            style={{
+              width: 8,
+              height: 8,
+              borderRadius: '50%',
+              backgroundColor: filled ? color : 'transparent',
+              border: `1.5px solid ${filled ? color : 'var(--color-theme-border-hover)'}`,
+              flexShrink: 0,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
 
 export default function RewardsPage() {
   const weeklyWins = useGameStore((s) => s.weeklyWins);
@@ -24,67 +62,117 @@ export default function RewardsPage() {
     return () => clearInterval(id);
   }, []);
 
+  const earnedStreakTiers = streakRewardTiers.filter((t) => weeklyStreak >= t.threshold);
+  const earnedWinsTiers = winsRewardTiers.filter((t) => weeklyWins >= t.threshold);
+  const accountLinked = espnLinked && dkLinked;
+
   return (
     <div className="space-y-5">
       <h2 className="text-[20px] leading-[26px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>Rewards</h2>
 
-      {/* Bonus Bets Summary */}
+      {/* Bonus Bets Summary — with prominent link CTA at the top when unlinked */}
       <div
-        className="border rounded-xl p-5 text-center"
+        className="border rounded-xl p-5"
         style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
       >
-        <div className="text-[12px] leading-[14px] tracking-[0.02em] uppercase font-title mb-2" style={{ color: 'var(--color-theme-text-tertiary)' }}>
-          Bonus Bets Available
-        </div>
-        <div className="text-[36px] leading-[40px] font-display font-black tabular-nums" style={{ color: totalBonusBets > 0 ? 'var(--color-earned)' : 'var(--color-theme-text)' }}>
-          ${totalBonusBets}
-        </div>
-        <div className="text-[12px] leading-[14px] tracking-[0.02em] font-body mt-2" style={{ color: 'var(--color-theme-text-muted)' }}>
-          {countdown.expired ? 'Week expired' : `Resets in ${formatCountdown(countdown)}`}
+        {!accountLinked && (
+          <div
+            className="rounded-lg px-4 py-3 mb-4 flex items-center justify-between gap-3"
+            style={{ backgroundColor: 'rgba(255,218,24,0.08)', border: '1px solid var(--color-streak)' }}
+          >
+            <div>
+              <p className="text-[13px] leading-[18px] font-bold font-title" style={{ color: 'var(--color-streak)' }}>
+                Link your DraftKings account
+              </p>
+              <p className="text-[11px] leading-[14px] font-body mt-0.5" style={{ color: 'var(--color-theme-text-secondary)' }}>
+                Required to claim any Bonus Bets you earn
+              </p>
+            </div>
+            <button
+              onClick={() => { if (!espnLinked) linkESPN(); else linkDK(); }}
+              className="shrink-0 rounded-full px-3 py-1.5 text-[12px] font-bold font-title"
+              style={{ backgroundColor: 'var(--color-streak)', color: '#000000' }}
+            >
+              LINK NOW
+            </button>
+          </div>
+        )}
+
+        <div className="text-center">
+          <div className="text-[12px] leading-[14px] tracking-[0.02em] uppercase font-title mb-2" style={{ color: 'var(--color-theme-text-tertiary)' }}>
+            Bonus Bets Available
+          </div>
+          <div className="text-[40px] leading-[44px] font-display font-black tabular-nums" style={{ color: totalBonusBets > 0 ? 'var(--color-earned)' : 'var(--color-theme-text)' }}>
+            ${totalBonusBets}
+          </div>
+          <div className="text-[12px] leading-[14px] tracking-[0.02em] font-body mt-2" style={{ color: 'var(--color-theme-text-muted)' }}>
+            {countdown.expired ? 'Week expired' : `EXPIRES in ${formatCountdown(countdown)}`}
+          </div>
         </div>
       </div>
 
-      {/* Earned Rewards List */}
-      <div>
-        <h3 className="text-[16px] leading-[24px] font-bold uppercase font-title mb-3" style={{ color: 'var(--color-theme-text-secondary)' }}>
-          Earned This Week
-        </h3>
-        {unlocked.length > 0 ? (
+      {/* Coming Your Way — earned tiers with award countdown infographics */}
+      {unlocked.length > 0 && (
+        <div>
+          <h3 className="text-[16px] leading-[24px] font-bold uppercase font-title mb-3" style={{ color: 'var(--color-theme-text-secondary)' }}>
+            Coming Your Way
+          </h3>
           <div className="space-y-2">
-            {unlocked.map((tier) => (
+            {earnedStreakTiers.map((tier) => (
               <div
                 key={tier.id}
-                className="border rounded-lg px-4 py-3 flex items-center justify-between"
+                className="border rounded-xl px-4 py-3"
                 style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
               >
-                <div className="flex items-center gap-3">
-                  <span style={{ color: 'var(--color-theme-text)' }}><Icon name={tier.icon} size={24} /></span>
+                <div className="flex items-center justify-between mb-2">
                   <div>
                     <div className="text-[14px] leading-[20px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>
                       {tier.prize}
                     </div>
-                    <div className="text-[12px] leading-[14px] font-body" style={{ color: 'var(--color-theme-text-tertiary)' }}>
+                    <div className="text-[11px] leading-[14px] font-body mt-0.5" style={{ color: 'var(--color-theme-text-tertiary)' }}>
                       {tier.description}
                     </div>
                   </div>
+                  <div className="flex items-center gap-1.5">
+                    <DKCrownLogo size={16} />
+                    <span className="text-[11px] font-bold font-title" style={{ color: 'var(--color-earned)' }}>EARNED</span>
+                  </div>
                 </div>
-                <span className="text-[11px] leading-[12px] tracking-[0.02em] font-bold font-title text-status-success bg-status-success/10 px-2 py-1 rounded-full">
-                  EARNED
-                </span>
+                <MiniPips current={weeklyStreak} threshold={tier.threshold} color="var(--color-streak)" />
+                <p className="text-[11px] leading-[14px] font-body mt-2" style={{ color: 'var(--color-theme-text-muted)' }}>
+                  {countdown.expired ? 'Being processed' : `AWARDED in ${formatCountdown(countdown)}`}
+                </p>
+              </div>
+            ))}
+            {earnedWinsTiers.map((tier) => (
+              <div
+                key={tier.id}
+                className="border rounded-xl px-4 py-3"
+                style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div>
+                    <div className="text-[14px] leading-[20px] font-bold font-title" style={{ color: 'var(--color-theme-text)' }}>
+                      {tier.prize}
+                    </div>
+                    <div className="text-[11px] leading-[14px] font-body mt-0.5" style={{ color: 'var(--color-theme-text-tertiary)' }}>
+                      {tier.description}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <DKCrownLogo size={16} />
+                    <span className="text-[11px] font-bold font-title" style={{ color: 'var(--color-earned)' }}>EARNED</span>
+                  </div>
+                </div>
+                <MiniPips current={weeklyWins} threshold={tier.threshold} color="var(--color-wins)" />
+                <p className="text-[11px] leading-[14px] font-body mt-2" style={{ color: 'var(--color-theme-text-muted)' }}>
+                  {countdown.expired ? 'Being processed' : `AWARDED in ${formatCountdown(countdown)}`}
+                </p>
               </div>
             ))}
           </div>
-        ) : (
-          <div
-            className="border rounded-xl p-6 text-center"
-            style={{ backgroundColor: 'var(--color-theme-surface)', borderColor: 'var(--color-theme-border)' }}
-          >
-            <p className="text-[14px] leading-[20px] font-body" style={{ color: 'var(--color-theme-text-tertiary)' }}>
-              Keep picking to earn bonus bets!
-            </p>
-          </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Dual Progress Bars */}
       <div>

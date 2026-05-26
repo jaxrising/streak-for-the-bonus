@@ -82,7 +82,7 @@ export default function SportFilterChips({ active, onChange, availableLeagues }:
 
   return (
     <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4">
-      {/* Top Events pill */}
+      {/* All Events pill */}
       <button
         onClick={() => onChange('all')}
         className="shrink-0 flex items-center gap-1.5 h-8 rounded-full px-3 transition-all text-[12px] leading-[14px] tracking-[0.02em] font-bold font-title uppercase whitespace-nowrap"
@@ -95,7 +95,7 @@ export default function SportFilterChips({ active, onChange, availableLeagues }:
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
         </svg>
-        Top Events
+        ALL EVENTS
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
           <polyline points="9 18 15 12 9 6" />
         </svg>

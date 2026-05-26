@@ -15,38 +15,19 @@ const cards = [
   },
   {
     headline: 'One Pick at a Time',
-    body: 'Choose a side on any available matchup\u2014spreads, totals, player props, and more. Wait for your result, then pick again.',
+    body: 'Choose a side on any available matchup—spreads, totals, player props, and more. Wait for your result, then pick again.',
     icon: '☝️',
   },
   {
-    headline: 'Stack Wins, Build Streaks',
-    body: 'Every correct pick extends your streak. The longer your streak, the bigger your rewards. A loss resets it\u2014so choose wisely.',
-    icon: '🔥',
-  },
-  {
     headline: 'Two Ways to Win Big',
-    body: 'Longest Streak\u2014The top weekly streak wins $10,000 in DK Bonus Bets.\nMost Wins\u2014The most correct picks in a week also wins $10,000.',
+    body: 'Longest Streak—The top weekly streak wins $10,000 in DK Bonus Bets.
+Most Wins—The most correct picks in a week also wins $10,000.',
     icon: '🏆',
   },
   {
     headline: 'Hit Thresholds, Earn Bonus Bets',
-    body: 'Reach streak and win milestones each week to unlock $5, $10, and $15 in DraftKings Bonus Bets. No purchase necessary\u2014ever.',
+    body: 'Reach streak and win milestones each week to unlock $10, $15, and $25 in DraftKings Bonus Bets. No purchase necessary—ever.',
     icon: '🎁',
-  },
-  {
-    headline: 'Climb the Leaderboard',
-    body: 'Compete against other players for the top spot. Daily, weekly, and all-time rankings keep it competitive.',
-    icon: '👥',
-  },
-  {
-    headline: '365 Days a Year',
-    body: 'NFL, NBA, MLB, NHL, soccer, golf, and more. New matchups drop daily. Weeks run Tuesday\u2013Monday so Monday Night Football is always the finale.',
-    icon: '📅',
-  },
-  {
-    headline: 'Link & Play',
-    body: 'Connect your ESPN and DraftKings accounts to claim your prizes. Then make your first pick\u2014your streak starts now.',
-    icon: '🔗',
   },
 ];
 

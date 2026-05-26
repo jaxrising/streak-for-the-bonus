@@ -7,8 +7,8 @@ export const winsRewardTiers: RewardTier[] = [
     threshold: 3,
     title: 'Hot Picker',
     description: 'Win 3 picks in a week',
-    prize: '$5 Bonus Bet',
-    prizeValue: 5,
+    prize: '$10 Bonus Bet',
+    prizeValue: 10,
     icon: 'score',
   },
   {
@@ -40,8 +40,8 @@ export const streakRewardTiers: RewardTier[] = [
     threshold: 3,
     title: '3-Win Streak',
     description: 'Hit a 3-win streak',
-    prize: '$5 Bonus Bet',
-    prizeValue: 5,
+    prize: '$10 Bonus Bet',
+    prizeValue: 10,
     icon: 'fire-flame',
   },
   {

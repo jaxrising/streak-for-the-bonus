@@ -17,6 +17,7 @@ interface GameState {
   submittedPick: { offeringId: string; side: PickSide; chosenOption: string } | null;
   submitted: boolean;
   weeklyStreak: number;
+  longestWeeklyStreak: number;
   weeklyWins: number;
   allTimeWins: number;
   pickHistory: PickRecord[];
@@ -44,6 +45,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   submittedPick: null,
   submitted: false,
   weeklyStreak: 0,
+  longestWeeklyStreak: 0,
   weeklyWins: 0,
   allTimeWins: 0,
   uid: null,
@@ -170,10 +172,12 @@ export const useGameStore = create<GameState>((set, get) => ({
     const newStreak = won ? state.weeklyStreak + 1 : 0;
     const newWeeklyWins = won ? state.weeklyWins + 1 : state.weeklyWins;
     const newAllTimeWins = won ? state.allTimeWins + 1 : state.allTimeWins;
+    const newLongest = Math.max(state.longestWeeklyStreak, newStreak);
 
     set({
       activePick: null,
       weeklyStreak: newStreak,
+      longestWeeklyStreak: newLongest,
       weeklyWins: newWeeklyWins,
       allTimeWins: newAllTimeWins,
       pickHistory: updatedHistory,
@@ -201,7 +205,7 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   resetWeek: () => {
-    set({ weeklyStreak: 0, weeklyWins: 0 });
+    set({ weeklyStreak: 0, longestWeeklyStreak: 0, weeklyWins: 0 });
   },
 
   resetDemo: () => {
@@ -211,6 +215,7 @@ export const useGameStore = create<GameState>((set, get) => ({
       submittedPick: null,
       submitted: false,
       weeklyStreak: 0,
+      longestWeeklyStreak: 0,
       weeklyWins: 0,
       allTimeWins: 0,
       pickHistory: [],

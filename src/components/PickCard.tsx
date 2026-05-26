@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { Offering, PickSide, Sport } from '../types';
 import { useGameStore } from '../store/gameStore';
 import SportIcon from './SportIcon';
@@ -21,23 +20,6 @@ const UNIT_MAP: Record<Sport, string> = {
   WWE: 'points',
 };
 
-function getSpreadTooltip(odds: string | undefined, teamName: string, sport: Sport): string | undefined {
-  if (!odds) return undefined;
-  const match = odds.match(/^([+-]?\d+\.?\d*)/);
-  if (!match) return undefined;
-  const line = parseFloat(match[1]);
-  const unit = UNIT_MAP[sport] || 'points';
-  if (line < 0) {
-    const val = Math.ceil(Math.abs(line));
-    const u = val === 1 ? unit.replace(/s$/, '') : unit;
-    return `${teamName} needs to win by ${val}+ ${u}`;
-  } else if (line > 0) {
-    const val = Math.floor(line);
-    const u = val === 1 ? unit.replace(/s$/, '') : unit;
-    return `${teamName} can lose by ${val} ${u} and still cover`;
-  }
-  return undefined;
-}
 
 function PickButton({
   label,
@@ -58,7 +40,6 @@ function PickButton({
   label: string;
   shortLabel?: string;
   abbrLabel?: string;
-  odds?: string;
   pickPct?: number;
   image?: string;
   color?: string;
@@ -66,8 +47,6 @@ function PickButton({
   isSelected: boolean;
   isDisabled: boolean;
   isHovered: boolean;
-  tooltipText?: string;
-  onHoverOdds: (hovering: boolean) => void;
   onClick: () => void;
 }) {
   const muted = isDisabled && !isSelected;
@@ -122,73 +101,18 @@ function PickButton({
         <span className={`team-name-abbr block ${isHeadshot ? 'truncate' : 'whitespace-nowrap'}`}>{abbrLabel || (shortLabel || label)}</span>
       </span>
 
-      {/* Stats area — right-aligned */}
-      {(pickPct != null || odds) && (
+      {/* Stats area — right-aligned (pick % only, no moneylines) */}
+      {pickPct != null && (
         <div
           className="relative z-10 flex flex-col items-end shrink-0 pr-[24px] pl-2 gap-[4px]"
           style={{ overflow: 'visible' }}
-          onMouseEnter={() => onHoverOdds(true)}
-          onMouseLeave={() => onHoverOdds(false)}
         >
-          {/* Tooltip — anchored directly to stats area */}
-          {isHovered && tooltipText && (
-            <div
-              className="absolute pointer-events-none"
-              style={{
-                bottom: '100%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                marginBottom: 6,
-                zIndex: 9999,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <div
-                style={{
-                  backgroundColor: '#FF9151',
-                  borderRadius: 8,
-                  padding: '6px 12px',
-                  fontSize: 13,
-                  fontWeight: 500,
-                  color: '#000000',
-                  whiteSpace: 'nowrap',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                }}
-              >
-                {tooltipText}
-              </div>
-              <div
-                style={{
-                  width: 0,
-                  height: 0,
-                  borderLeft: '6px solid transparent',
-                  borderRight: '6px solid transparent',
-                  borderTop: '6px solid #FF9151',
-                }}
-              />
-            </div>
-          )}
-
-          {pickPct != null && (
-            <span
-              className="text-[10px] leading-[12px] font-body font-normal tabular-nums"
-              style={{ color: textColor }}
-            >
-              {pickPct}% picked
-            </span>
-          )}
-          {odds && (
-            <div className="flex items-center gap-1">
-              <span
-                className="text-[12px] leading-[14px] font-body font-medium"
-                style={{ color: subTextColor }}
-              >
-                {odds}
-              </span>
-            </div>
-          )}
+          <span
+            className="text-[10px] leading-[12px] font-body font-normal tabular-nums"
+            style={{ color: textColor }}
+          >
+            {pickPct}% picked
+          </span>
         </div>
       )}
     </button>
@@ -203,15 +127,11 @@ export default function PickCard({ offering, index }: PickCardProps) {
   const isLocked = offering.startTimeISO ? new Date(offering.startTimeISO) <= new Date() : false;
   const isDisabled = submitted || isLocked;
   const isHeadshot = HEADSHOT_SPORTS.has(offering.sport);
-  const [hoveredSide, setHoveredSide] = useState<'A' | 'B' | null>(null);
 
   const handlePick = (side: PickSide) => {
     if (isDisabled) return;
     selectPick(offering, side);
   };
-
-  const tooltipTextA = getSpreadTooltip(offering.oddsA, offering.shortA || offering.optionA, offering.sport);
-  const tooltipTextB = getSpreadTooltip(offering.oddsB, offering.shortB || offering.optionB, offering.sport);
 
   return (
     <div
@@ -221,7 +141,7 @@ export default function PickCard({ offering, index }: PickCardProps) {
           : isDisabled && !isSelected
           ? 'opacity-50'
           : ''
-      } ${hoveredSide ? 'z-50' : ''}`}
+      }`}
       style={{
         animationDelay: `${index * 60}ms`,
         backgroundColor: 'var(--color-theme-surface)',
@@ -232,9 +152,18 @@ export default function PickCard({ offering, index }: PickCardProps) {
       <div className="flex items-center gap-2 mb-3">
         <SportIcon league={offering.league} />
         <span className="text-[12px] leading-[14px] tracking-[0.02em] font-medium uppercase font-title" style={{ color: 'var(--color-theme-text-tertiary)' }}>{offering.league}</span>
-        <span className="ml-auto text-xs" style={{ color: isLocked ? '#ff3232' : 'var(--color-theme-text-muted)' }}>
-          {isLocked ? 'Locked' : offering.startTime}
-        </span>
+        {isLocked ? (
+          <span className="ml-auto flex items-center gap-1">
+            <svg width="12" height="14" viewBox="0 0 12 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9.5 6H9V4.5C9 2.57 7.43 1 5.5 1C3.57 1 2 2.57 2 4.5V6H1.5C0.95 6 0.5 6.45 0.5 7V12.5C0.5 13.05 0.95 13.5 1.5 13.5H9.5C10.05 13.5 10.5 13.05 10.5 12.5V7C10.5 6.45 10.05 6 9.5 6ZM5.5 10.5C4.95 10.5 4.5 10.05 4.5 9.5C4.5 8.95 4.95 8.5 5.5 8.5C6.05 8.5 6.5 8.95 6.5 9.5C6.5 10.05 6.05 10.5 5.5 10.5ZM7.5 6H3.5V4.5C3.5 3.4 4.4 2.5 5.5 2.5C6.6 2.5 7.5 3.4 7.5 4.5V6Z" fill="#006FFF"/>
+            </svg>
+            <span className="text-xs" style={{ color: '#006FFF' }}>Locked</span>
+          </span>
+        ) : (
+          <span className="ml-auto text-xs" style={{ color: 'var(--color-theme-text-muted)' }}>
+            {offering.startTime}
+          </span>
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-2">
@@ -242,32 +171,26 @@ export default function PickCard({ offering, index }: PickCardProps) {
           label={offering.optionA}
           shortLabel={offering.shortA}
           abbrLabel={offering.abbrA}
-          odds={offering.oddsA}
           pickPct={submitted ? offering.pickPctA : undefined}
           image={offering.imageA}
           color={offering.colorA}
           isHeadshot={isHeadshot}
           isSelected={isSelected && selectedSide === 'A'}
           isDisabled={isDisabled}
-          isHovered={hoveredSide === 'A'}
-          tooltipText={tooltipTextA}
-          onHoverOdds={(h) => setHoveredSide(h ? 'A' : null)}
+          isHovered={false}
           onClick={() => handlePick('A')}
         />
         <PickButton
           label={offering.optionB}
           shortLabel={offering.shortB}
           abbrLabel={offering.abbrB}
-          odds={offering.oddsB}
           pickPct={submitted ? offering.pickPctB : undefined}
           image={offering.imageB}
           color={offering.colorB}
           isHeadshot={isHeadshot}
           isSelected={isSelected && selectedSide === 'B'}
           isDisabled={isDisabled}
-          isHovered={hoveredSide === 'B'}
-          tooltipText={tooltipTextB}
-          onHoverOdds={(h) => setHoveredSide(h ? 'B' : null)}
+          isHovered={false}
           onClick={() => handlePick('B')}
         />
       </div>
