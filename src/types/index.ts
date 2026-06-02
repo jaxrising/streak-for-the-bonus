@@ -74,6 +74,16 @@ export interface RewardTier {
   icon: string;
 }
 
+export interface AchievementContext {
+  consecutiveDaysWithWin: number;
+  consecutiveWeeksWithWin: number;
+  consecutiveWeeksStreakThreshold: number;
+  consecutiveWeeksWinsThreshold: number;
+  accountLinked: boolean;
+  isWeeklyStreakLeader: boolean;
+  isWeeklyWinsLeader: boolean;
+}
+
 export interface Achievement {
   id: string;
   title: string;
@@ -81,5 +91,5 @@ export interface Achievement {
   icon: string;
   badgeImage: string;
   earned: boolean;
-  condition: (weeklyWins: number, weeklyStreak: number, allTimeWins: number) => boolean;
+  condition: (weeklyWins: number, weeklyStreak: number, allTimeWins: number, ctx?: AchievementContext) => boolean;
 }

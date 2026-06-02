@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { Achievement, ActivePick, PickRecord, PickSide, Offering } from '../types';
+import type { Achievement, AchievementContext, ActivePick, PickRecord, PickSide, Offering } from '../types';
 import { achievements } from '../data/rewards';
 
 const USE_FIREBASE = import.meta.env.VITE_USE_FIREBASE === 'true';
@@ -25,6 +25,15 @@ interface GameState {
   dkLinked: boolean;
   uid: string | null;
   newlyEarnedAchievement: Achievement | null;
+  // Consecutive tracking
+  lastWinDate: string | null;
+  consecutiveDaysWithWin: number;
+  consecutiveWeeksWithWin: number;
+  consecutiveWeeksStreakThreshold: number;
+  consecutiveWeeksWinsThreshold: number;
+  // Weekly leaderboard flags (set server-side)
+  isWeeklyStreakLeader: boolean;
+  isWeeklyWinsLeader: boolean;
 
   selectPick: (offering: Offering, side: PickSide) => void;
   submitPick: () => void;
@@ -53,6 +62,13 @@ export const useGameStore = create<GameState>((set, get) => ({
   espnLinked: false,
   dkLinked: false,
   newlyEarnedAchievement: null,
+  lastWinDate: null,
+  consecutiveDaysWithWin: 0,
+  consecutiveWeeksWithWin: 0,
+  consecutiveWeeksStreakThreshold: 0,
+  consecutiveWeeksWinsThreshold: 0,
+  isWeeklyStreakLeader: false,
+  isWeeklyWinsLeader: false,
 
   selectPick: (offering, side) => {
     const state = get();
@@ -174,6 +190,26 @@ export const useGameStore = create<GameState>((set, get) => ({
     const newAllTimeWins = won ? state.allTimeWins + 1 : state.allTimeWins;
     const newLongest = Math.max(state.longestWeeklyStreak, newStreak);
 
+    // Consecutive days tracking
+    const today = new Date().toISOString().split('T')[0];
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    let newConsecutiveDays = state.consecutiveDaysWithWin;
+    let newLastWinDate = state.lastWinDate;
+    if (won && state.lastWinDate !== today) {
+      newConsecutiveDays = state.lastWinDate === yesterday ? state.consecutiveDaysWithWin + 1 : 1;
+      newLastWinDate = today;
+    }
+
+    const ctx: AchievementContext = {
+      consecutiveDaysWithWin: newConsecutiveDays,
+      consecutiveWeeksWithWin: state.consecutiveWeeksWithWin,
+      consecutiveWeeksStreakThreshold: state.consecutiveWeeksStreakThreshold,
+      consecutiveWeeksWinsThreshold: state.consecutiveWeeksWinsThreshold,
+      accountLinked: state.espnLinked && state.dkLinked,
+      isWeeklyStreakLeader: state.isWeeklyStreakLeader,
+      isWeeklyWinsLeader: state.isWeeklyWinsLeader,
+    };
+
     set({
       activePick: null,
       weeklyStreak: newStreak,
@@ -181,16 +217,18 @@ export const useGameStore = create<GameState>((set, get) => ({
       weeklyWins: newWeeklyWins,
       allTimeWins: newAllTimeWins,
       pickHistory: updatedHistory,
+      lastWinDate: newLastWinDate,
+      consecutiveDaysWithWin: newConsecutiveDays,
     });
 
     if (won) {
       const previouslyEarned = new Set(
         achievements
-          .filter((a) => a.condition(state.weeklyWins, state.weeklyStreak, state.allTimeWins))
+          .filter((a) => a.condition(state.weeklyWins, state.weeklyStreak, state.allTimeWins, ctx))
           .map((a) => a.id)
       );
       const newlyEarned = achievements.find(
-        (a) => !previouslyEarned.has(a.id) && a.condition(newWeeklyWins, newStreak, newAllTimeWins)
+        (a) => !previouslyEarned.has(a.id) && a.condition(newWeeklyWins, newStreak, newAllTimeWins, ctx)
       );
       if (newlyEarned) {
         set({ newlyEarnedAchievement: newlyEarned });
@@ -205,7 +243,17 @@ export const useGameStore = create<GameState>((set, get) => ({
   },
 
   resetWeek: () => {
-    set({ weeklyStreak: 0, longestWeeklyStreak: 0, weeklyWins: 0 });
+    const state = get();
+    const WINS_THRESHOLD = 3;
+    const STREAK_THRESHOLD = 3;
+    set({
+      weeklyStreak: 0,
+      longestWeeklyStreak: 0,
+      weeklyWins: 0,
+      consecutiveWeeksWithWin: state.weeklyWins > 0 ? state.consecutiveWeeksWithWin + 1 : 0,
+      consecutiveWeeksStreakThreshold: state.longestWeeklyStreak >= STREAK_THRESHOLD ? state.consecutiveWeeksStreakThreshold + 1 : 0,
+      consecutiveWeeksWinsThreshold: state.weeklyWins >= WINS_THRESHOLD ? state.consecutiveWeeksWinsThreshold + 1 : 0,
+    });
   },
 
   resetDemo: () => {
@@ -221,11 +269,34 @@ export const useGameStore = create<GameState>((set, get) => ({
       pickHistory: [],
       espnLinked: false,
       dkLinked: false,
+      lastWinDate: null,
+      consecutiveDaysWithWin: 0,
+      consecutiveWeeksWithWin: 0,
+      consecutiveWeeksStreakThreshold: 0,
+      consecutiveWeeksWinsThreshold: 0,
     });
   },
 
   linkESPN: () => set({ espnLinked: true }),
-  linkDK: () => set({ dkLinked: true }),
+  linkDK: () => {
+    set({ dkLinked: true });
+    // Check for Link Up achievement
+    const state = get();
+    const ctx: AchievementContext = {
+      consecutiveDaysWithWin: state.consecutiveDaysWithWin,
+      consecutiveWeeksWithWin: state.consecutiveWeeksWithWin,
+      consecutiveWeeksStreakThreshold: state.consecutiveWeeksStreakThreshold,
+      consecutiveWeeksWinsThreshold: state.consecutiveWeeksWinsThreshold,
+      accountLinked: true,
+      isWeeklyStreakLeader: state.isWeeklyStreakLeader,
+      isWeeklyWinsLeader: state.isWeeklyWinsLeader,
+    };
+    const linkAchievement = achievements.find(
+      (a) => a.id === 'link-up' && !a.condition(state.weeklyWins, state.weeklyStreak, state.allTimeWins, { ...ctx, accountLinked: false })
+        && a.condition(state.weeklyWins, state.weeklyStreak, state.allTimeWins, ctx)
+    );
+    if (linkAchievement) set({ newlyEarnedAchievement: linkAchievement });
+  },
   clearAchievementToast: () => set({ newlyEarnedAchievement: null }),
 
   setUser: (uid) => set({ uid }),
