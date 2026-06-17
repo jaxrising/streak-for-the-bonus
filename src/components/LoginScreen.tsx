@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { signInWithEmail, signUpWithEmail } from '../firebase/auth';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { useAuthStore } from '../store/authStore';
 
@@ -79,7 +79,7 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       const userRef = doc(db, 'users', uid);
-      await updateDoc(userRef, { displayName: trimmed, hasSeenHowToPlay: false });
+      await setDoc(userRef, { displayName: trimmed, hasSeenHowToPlay: false }, { merge: true });
 
       // Update auth store so App.tsx gates pass
       useAuthStore.getState().setUser({
@@ -88,7 +88,8 @@ export default function LoginScreen() {
         username: trimmed,
         hasSeenHowToPlay: false,
       });
-    } catch {
+    } catch (err) {
+      console.error('[LoginScreen] Failed to save username:', err);
       setError('Failed to save username. Please try again.');
     } finally {
       setLoading(false);
