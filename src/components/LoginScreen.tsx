@@ -90,7 +90,8 @@ export default function LoginScreen() {
       });
     } catch (err) {
       console.error('[LoginScreen] Failed to save username:', err);
-      setError('Failed to save username. Please try again.');
+      const code = (err as { code?: string }).code ?? (err as Error).message ?? 'unknown';
+      setError(`Failed to save username. (${code})`);
     } finally {
       setLoading(false);
     }
